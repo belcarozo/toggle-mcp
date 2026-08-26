@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/server";
 import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
-import { DateTime } from "luxon";
 import { z } from "zod";
 import { DEFAULT_CONFIG_PATH, loadConfig, requireApiToken } from "./config.js";
 import { readAllRepos } from "./git.js";
@@ -141,7 +140,20 @@ server.registerTool(
       "Build a baseline time-entry proposal for a week from git activity and calendar events. Writes nothing to Toggl. " +
       "Calendar events must be supplied by the caller (e.g. from the Google Calendar MCP) for calendarIds in config.json. " +
       "Days that already have Toggl entries are skipped. Pass the returned object straight to apply_week to write it.",
-    inputSchema: weekSelectionSchema.and(z.object({ calendarEvents: z.array(calendarEventSchema).default([]) })),
+    // A flat object, not weekSelectionSchema.and(...): zod's intersection
+    // compiles to a JSON Schema `allOf`, which several tool-schema consumers
+    // (this one's deferred-tool indexing included) silently drop rather than
+    // flatten - the tool would list over raw MCP but never actually resolve.
+    inputSchema: z
+      .object({
+        week: z.enum(["this", "last"]).optional().describe('"this" = Monday through today; "last" = previous Mon-Fri'),
+        startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe("YYYY-MM-DD, used with endDate instead of week"),
+        endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+        calendarEvents: z.array(calendarEventSchema).default([]),
+      })
+      .refine((v) => v.week !== undefined || (v.startDate !== undefined && v.endDate !== undefined), {
+        message: "provide either `week` or both `startDate` and `endDate`",
+      }),
   },
   async (input) => {
     try {
@@ -187,10 +199,6 @@ server.registerTool(
     try {
       const config = loadConfig();
       const client = new TogglClient(requireApiToken());
-      const freshExisting = await client.listTimeEntries(weekPlan.weekStart, weekPlan.weekEnd);
-      const trackedDates = new Set(
-        freshExisting.map((e) => DateTime.fromISO(e.start, { zone: "utc" }).setZone(config.timezone).toISODate()),
-      );
 
       const results = [];
       for (const day of weekPlan.days) {
@@ -198,7 +206,12 @@ server.registerTool(
           results.push({ date: day.date, skipped: day.skip });
           continue;
         }
-        if (trackedDates.has(day.date)) {
+        // Re-check right before writing THIS day, not once for the whole week up
+        // front - the write loop below is throttled and can span well over a
+        // minute, long enough for something to get tracked on a later day in
+        // between the upfront check and that day's turn.
+        const stillUntracked = (await client.listTimeEntries(day.date, day.date)).length === 0;
+        if (!stillUntracked) {
           results.push({ date: day.date, skipped: "already-tracked-at-apply-time" });
           continue;
         }

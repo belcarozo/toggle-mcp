@@ -143,14 +143,18 @@ export function planDay(params: PlanDayParams): PlanDayResult {
     end: atLocalTime(date, config.workday.lunchAt, zone).plus({ minutes: config.workday.lunchMinutes }),
   };
 
-  // Meetings get their own entries below, so they must also be removed here -
-  // otherwise that slot is double-counted as both a meeting and ticket work.
-  const nonWork = mergeIntervals([
-    ...configClassIntervals,
-    ...calendarClassIntervals,
-    lunchInterval,
-    ...dedupedMeetings.map((m) => m.interval),
-  ]);
+  // Time that was never available to begin with (lunch/classes), independent of meetings.
+  const unavailable = mergeIntervals([...configClassIntervals, ...calendarClassIntervals, lunchInterval]);
+
+  // A meeting that falls inside lunch/a class isn't extra work on top of that -
+  // it's the same slot. Clip each meeting down to only the portion that overlaps
+  // otherwise-free time before it becomes its own entry; a meeting entirely
+  // inside lunch/a class produces no entry at all.
+  const clippedMeetings = dedupedMeetings.flatMap((meeting) =>
+    subtractIntervals(meeting.interval, unavailable).map((interval) => ({ title: meeting.title, interval })),
+  );
+
+  const nonWork = mergeIntervals([...unavailable, ...clippedMeetings.map((m) => m.interval)]);
   const freeBlocks = subtractIntervals(window, nonWork).filter(
     (b) => durationSeconds(b) >= config.minEntryMinutes * 60,
   );
@@ -158,7 +162,7 @@ export function planDay(params: PlanDayParams): PlanDayResult {
   const entries: PlannedEntry[] = [];
   let carryTicket = priorTicket;
 
-  for (const meeting of dedupedMeetings) {
+  for (const meeting of clippedMeetings) {
     entries.push(toEntry("meeting", meeting.title, roundInterval(meeting.interval, config.roundToMinutes), config.tags));
   }
 

@@ -139,6 +139,38 @@ describe("planDay - meetings", () => {
     const meeting = plan.entries.find((e) => e.kind === "meeting");
     expect(DateTime.fromISO(meeting!.startLocal).toFormat("HH:mm")).toBe("10:00");
   });
+
+  it("a meeting entirely inside lunch produces no entry and does not inflate the day total", () => {
+    const { plan } = planDay({
+      date: "2026-08-25", // Tue, no classes; lunch is 13:00-13:30
+      config: baseConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1-x", "FFT-1", { kind: "commit", description: "FFT-1: work" })],
+      calendarEvents: [{ title: "Standup", start: "2026-08-25T13:05:00-03:00", end: "2026-08-25T13:20:00-03:00" }],
+      existingEntries: [],
+      priorTicket: null,
+    });
+    expect(plan.entries.some((e) => e.kind === "meeting")).toBe(false);
+    expect(plan.totalSeconds).toBe(7.5 * 3600); // same as a day with no meeting at all - lunch already accounted for it
+  });
+
+  it("a meeting straddling the end of lunch is clipped to only its non-lunch portion", () => {
+    const { plan } = planDay({
+      date: "2026-08-25", // lunch is 13:00-13:30
+      config: baseConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1-x", "FFT-1", { kind: "commit", description: "FFT-1: work" })],
+      calendarEvents: [{ title: "Post-lunch sync", start: "2026-08-25T13:15:00-03:00", end: "2026-08-25T13:45:00-03:00" }],
+      existingEntries: [],
+      priorTicket: null,
+    });
+    const meeting = plan.entries.find((e) => e.kind === "meeting");
+    expect(DateTime.fromISO(meeting!.startLocal).toFormat("HH:mm")).toBe("13:30"); // not 13:15 - that part was already lunch
+    expect(meeting!.durationSeconds).toBe(15 * 60);
+    // Day total is unchanged from a plain 7.5h day: the meeting's first 15min
+    // coincided with lunch (already excluded), and its second 15min was
+    // already-free time that's now labeled "meeting" instead of "ticket" -
+    // relabeled, not added on top.
+    expect(plan.totalSeconds).toBe(7.5 * 3600);
+  });
 });
 
 describe("planDay - ticket attribution fallbacks", () => {

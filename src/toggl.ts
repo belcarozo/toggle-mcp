@@ -74,39 +74,45 @@ export class TogglClient {
     return `Basic ${Buffer.from(`${this.token}:api_token`).toString("base64")}`;
   }
 
-  private async request<T>(path: string, init: RequestInit = {}, retriesLeft = 5): Promise<T> {
-    return enqueue(async () => {
-      const wait = MIN_REQUEST_INTERVAL_MS - (Date.now() - lastRequestAt);
-      if (wait > 0) await sleep(wait);
-      lastRequestAt = Date.now();
+  private request<T>(path: string, init: RequestInit = {}): Promise<T> {
+    // The whole retry sequence must run inside a single enqueue()'d task.
+    // Retrying by calling back into a method that itself calls enqueue()
+    // would re-enter the module-level queue from within the task that's
+    // currently occupying it - a circular wait that hangs forever.
+    return enqueue(() => this.attempt<T>(path, init));
+  }
 
-      const res = await fetch(`${BASE_URL}${path}`, {
-        ...init,
-        headers: {
-          Authorization: this.authHeader(),
-          "Content-Type": "application/json",
-          ...init.headers,
-        },
-      });
+  private async attempt<T>(path: string, init: RequestInit, retriesLeft = 5): Promise<T> {
+    const wait = MIN_REQUEST_INTERVAL_MS - (Date.now() - lastRequestAt);
+    if (wait > 0) await sleep(wait);
+    lastRequestAt = Date.now();
 
-      if (res.status === 429) {
-        if (retriesLeft <= 0) {
-          throw new Error(`toggl-mcp: rate limited (429) on ${path} with no retries left`);
-        }
-        const retryAfterHeader = res.headers.get("Retry-After");
-        const retryAfterMs = retryAfterHeader ? Number(retryAfterHeader) * 1000 : 2000 * (6 - retriesLeft);
-        await sleep(retryAfterMs);
-        return this.request<T>(path, init, retriesLeft - 1);
-      }
-
-      if (!res.ok) {
-        const body = await res.text().catch(() => "");
-        throw new Error(`toggl-mcp: ${init.method ?? "GET"} ${path} failed: ${res.status} ${res.statusText} ${body}`);
-      }
-
-      if (res.status === 204) return undefined as T;
-      return (await res.json()) as T;
+    const res = await fetch(`${BASE_URL}${path}`, {
+      ...init,
+      headers: {
+        Authorization: this.authHeader(),
+        "Content-Type": "application/json",
+        ...init.headers,
+      },
     });
+
+    if (res.status === 429) {
+      if (retriesLeft <= 0) {
+        throw new Error(`toggl-mcp: rate limited (429) on ${path} with no retries left`);
+      }
+      const retryAfterHeader = res.headers.get("Retry-After");
+      const retryAfterMs = retryAfterHeader ? Number(retryAfterHeader) * 1000 : 2000 * (6 - retriesLeft);
+      await sleep(retryAfterMs);
+      return this.attempt<T>(path, init, retriesLeft - 1);
+    }
+
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      throw new Error(`toggl-mcp: ${init.method ?? "GET"} ${path} failed: ${res.status} ${res.statusText} ${body}`);
+    }
+
+    if (res.status === 204) return undefined as T;
+    return (await res.json()) as T;
   }
 
   /** GET /me, cached on disk for 24h - this endpoint is capped at 30 req/hour. */
