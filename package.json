@@ -12,7 +12,8 @@
   },
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && npm run build:bin",
+    "build:bin": "node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
     "dev": "tsx src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest"
