@@ -2,6 +2,7 @@ import { execFileSync } from "node:child_process";
 import { basename } from "node:path";
 import { DateTime } from "luxon";
 import type { GitEvent } from "./types.js";
+import { DEFAULT_BASE_BRANCHES } from "./defaults.js";
 
 // `git reflog --date=iso` lines look like:
 //   <hash> HEAD@{2026-08-24 16:23:22 -0300}: checkout: moving from spike/FFT-1316-silent-push to main
@@ -31,37 +32,31 @@ function parseSubject(subject: string): { kind: GitEvent["kind"]; description: s
 }
 
 /** A checkout target that isn't a real branch (SHA, detached HEAD, tag ref, etc). */
-function looksLikeBranch(ref: string): boolean {
-  if (ref === "main" || ref === "master" || ref === "develop") return false;
+export function looksLikeBranch(ref: string, baseBranches: string[] = DEFAULT_BASE_BRANCHES): boolean {
+  if (baseBranches.includes(ref)) return false;
   if (/^[0-9a-f]{7,40}$/i.test(ref)) return false;
   if (ref.startsWith("(")) return false;
   return true;
 }
 
-/**
- * Read reflog events for `repo` between `sinceIso`/`untilIso` (YYYY-MM-DD,
- * inclusive), attributing commit/pull/reset entries to whatever branch the
- * most recent checkout in the queried window pointed at. Entries before the
- * first checkout in-window have no known branch and are dropped - there is
- * no ticket to attribute them to anyway.
- */
-export function readReflogEvents(repo: string, sinceIso: string, untilIso: string, zone: string): GitEvent[] {
-  // Fetch a wider window than requested so a checkout that happened *before*
-  // `sinceIso` still establishes the branch context for commits at the start
-  // of the requested range. Without this, a window that opens mid-branch
-  // would drop every event in it for lack of a known "current branch".
-  const lookbackStart = DateTime.fromISO(sinceIso, { zone }).minus({ days: 21 }).toISODate()!;
+export interface ParseReflogOptions {
+  sinceIso: string;
+  untilIso: string;
+  zone: string;
+  repoName: string;
+  baseBranches?: string[];
+}
 
-  let raw: string;
-  try {
-    raw = execFileSync(
-      "git",
-      ["-C", repo, "reflog", "--date=iso", `--since=${lookbackStart} 00:00:00`, `--until=${untilIso} 23:59:59`],
-      { encoding: "utf8", maxBuffer: 1024 * 1024 * 16 },
-    );
-  } catch (err) {
-    throw new Error(`toggl-mcp: failed to read git reflog for ${repo}: ${(err as Error).message}`);
-  }
+/**
+ * Parse raw `git reflog --date=iso` output into events, attributing
+ * commit/pull/reset entries to whatever branch the most recent checkout in
+ * the queried window pointed at. Entries before the first checkout in-window
+ * have no known branch and are dropped - there is no ticket to attribute
+ * them to anyway. Pure - takes reflog text, not a repo path, so it's testable
+ * against a fixture without a real git checkout.
+ */
+export function parseReflog(raw: string, options: ParseReflogOptions): GitEvent[] {
+  const { sinceIso, untilIso, zone, repoName, baseBranches = DEFAULT_BASE_BRANCHES } = options;
 
   const lines = raw.split("\n").filter((l) => l.trim().length > 0);
   // reflog lists newest first; walk oldest-to-newest so "current branch" tracking is chronological.
@@ -69,7 +64,6 @@ export function readReflogEvents(repo: string, sinceIso: string, untilIso: strin
 
   const windowStart = DateTime.fromISO(sinceIso, { zone }).startOf("day");
   const windowEnd = DateTime.fromISO(untilIso, { zone }).endOf("day");
-  const repoName = basename(repo);
   const events: GitEvent[] = [];
   let currentBranch: string | null = null;
 
@@ -81,7 +75,7 @@ export function readReflogEvents(repo: string, sinceIso: string, untilIso: strin
     if (!parsed) continue;
 
     if (parsed.kind === "checkout") {
-      currentBranch = looksLikeBranch(parsed.toBranch!) ? parsed.toBranch! : null;
+      currentBranch = looksLikeBranch(parsed.toBranch!, baseBranches) ? parsed.toBranch! : null;
       continue; // the checkout itself isn't billable work, just a branch-context update
     }
 
@@ -105,6 +99,43 @@ export function readReflogEvents(repo: string, sinceIso: string, untilIso: strin
   return events;
 }
 
-export function readAllRepos(repos: string[], sinceIso: string, untilIso: string, zone: string): GitEvent[] {
-  return repos.flatMap((repo) => readReflogEvents(repo, sinceIso, untilIso, zone));
+/**
+ * Read reflog events for `repo` between `sinceIso`/`untilIso` (YYYY-MM-DD,
+ * inclusive). See `parseReflog` for the attribution logic.
+ */
+export function readReflogEvents(
+  repo: string,
+  sinceIso: string,
+  untilIso: string,
+  zone: string,
+  baseBranches: string[] = DEFAULT_BASE_BRANCHES,
+): GitEvent[] {
+  // Fetch a wider window than requested so a checkout that happened *before*
+  // `sinceIso` still establishes the branch context for commits at the start
+  // of the requested range. Without this, a window that opens mid-branch
+  // would drop every event in it for lack of a known "current branch".
+  const lookbackStart = DateTime.fromISO(sinceIso, { zone }).minus({ days: 21 }).toISODate()!;
+
+  let raw: string;
+  try {
+    raw = execFileSync(
+      "git",
+      ["-C", repo, "reflog", "--date=iso", `--since=${lookbackStart} 00:00:00`, `--until=${untilIso} 23:59:59`],
+      { encoding: "utf8", maxBuffer: 1024 * 1024 * 16 },
+    );
+  } catch (err) {
+    throw new Error(`toggl-mcp: failed to read git reflog for ${repo}: ${(err as Error).message}`);
+  }
+
+  return parseReflog(raw, { sinceIso, untilIso, zone, repoName: basename(repo), baseBranches });
+}
+
+export function readAllRepos(
+  repos: string[],
+  sinceIso: string,
+  untilIso: string,
+  zone: string,
+  baseBranches: string[] = DEFAULT_BASE_BRANCHES,
+): GitEvent[] {
+  return repos.flatMap((repo) => readReflogEvents(repo, sinceIso, untilIso, zone, baseBranches));
 }

@@ -17,6 +17,15 @@ describe("extractTicket", () => {
     expect(extractTicket("main")).toBeNull();
     expect(extractTicket("fix/section-title-typography")).toBeNull();
   });
+
+  it("supports a custom pattern for non-Jira-style keys", () => {
+    expect(extractTicket("story/BACKEND-4221-thing", "([A-Za-z]+-\\d+)")).toBe("BACKEND-4221");
+    expect(extractTicket("fix/FFT-1326-android-image", "([A-Za-z]+-\\d+)")).toBe("FFT-1326");
+  });
+
+  it("falls back to the whole match when the pattern has no capture group", () => {
+    expect(extractTicket("bug/1234-x", "\\d{3,}")).toBe("1234");
+  });
 });
 
 describe("describeFromBranch", () => {
@@ -67,5 +76,16 @@ describe("bestDescriptionFor", () => {
       event({ kind: "commit", description: "wip", timestamp: DateTime.fromISO("2026-08-24T11:00:00") }),
     ];
     expect(bestDescriptionFor("FFT-1326", events)).toBe("FFT-1326: removes prefetch");
+  });
+
+  it("strips a low-information message under a custom ticket pattern too", () => {
+    const events = [
+      event({
+        kind: "commit",
+        branch: "story/BACKEND-4221-align-splash",
+        description: "BACKEND-4221: wip",
+      }),
+    ];
+    expect(bestDescriptionFor("BACKEND-4221", events, "([A-Za-z]+-\\d+)")).toBe("BACKEND-4221: align splash");
   });
 });

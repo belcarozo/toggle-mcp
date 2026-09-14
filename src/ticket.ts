@@ -1,11 +1,11 @@
 import type { GitEvent } from "./types.js";
-
-const TICKET_PATTERN = /([A-Za-z]{2,4}-\d+)/;
+import { DEFAULT_TICKET_PATTERN } from "./defaults.js";
 
 /** Pull a ticket ID (e.g. "FFT-1326") out of a branch name, if present. */
-export function extractTicket(branch: string): string | null {
-  const match = branch.match(TICKET_PATTERN);
-  return match ? match[1].toUpperCase() : null;
+export function extractTicket(branch: string, pattern: string = DEFAULT_TICKET_PATTERN): string | null {
+  const match = branch.match(new RegExp(pattern));
+  if (!match) return null;
+  return (match[1] ?? match[0]).toUpperCase();
 }
 
 /**
@@ -28,7 +28,6 @@ export interface TicketAttribution {
   description: string;
 }
 
-const LEADING_TICKET = /^[A-Za-z]{2,4}-\d+\s*:?\s*/;
 const LOW_INFORMATION_MESSAGE = /^(fix(es|ed)?|wip|update[sd]?|tmp|temp|misc|checkpoint|changes|cleanup)\.?$/i;
 
 /**
@@ -36,8 +35,12 @@ const LOW_INFORMATION_MESSAGE = /^(fix(es|ed)?|wip|update[sd]?|tmp|temp|misc|che
  * carries no more information than the ticket id itself, so the branch-name
  * fallback (which at least names the change) is more useful to show.
  */
-function isLowInformation(description: string): boolean {
-  const stripped = description.replace(LEADING_TICKET, "").trim();
+function isLowInformation(description: string, pattern: string): boolean {
+  // No "i" flag: must match extractTicket's own case-sensitivity exactly, so a
+  // custom pattern that's deliberately case-sensitive isn't stripped here for
+  // a ticket shape extractTicket itself would never have recognized.
+  const leadingTicket = new RegExp(`^(?:${pattern})\\s*:?\\s*`);
+  const stripped = description.replace(leadingTicket, "").trim();
   return LOW_INFORMATION_MESSAGE.test(stripped);
 }
 
@@ -48,13 +51,17 @@ function isLowInformation(description: string): boolean {
  * unless that commit message is itself a generic placeholder, in which case
  * the branch name is more informative.
  */
-export function bestDescriptionFor(ticket: string, events: GitEvent[]): string {
+export function bestDescriptionFor(
+  ticket: string,
+  events: GitEvent[],
+  pattern: string = DEFAULT_TICKET_PATTERN,
+): string {
   const sorted = [...events].sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
   const withCommitMessage = sorted.find(
     (e) =>
       (e.kind === "commit" || e.kind === "commit-merge" || e.kind === "commit-amend") &&
       e.description &&
-      !isLowInformation(e.description),
+      !isLowInformation(e.description, pattern),
   );
   const raw = withCommitMessage?.description ?? describeFromBranch(sorted[0].branch, ticket);
   // Guarantee the ticket is visible even if the winning commit message didn't
@@ -63,8 +70,11 @@ export function bestDescriptionFor(ticket: string, events: GitEvent[]): string {
 }
 
 /** Attach `ticket` to every event whose branch resolves to one, dropping the rest. */
-export function withTickets(events: GitEvent[]): (GitEvent & { ticket: string })[] {
+export function withTickets(
+  events: GitEvent[],
+  pattern: string = DEFAULT_TICKET_PATTERN,
+): (GitEvent & { ticket: string })[] {
   return events
-    .map((e) => ({ ...e, ticket: extractTicket(e.branch) }))
+    .map((e) => ({ ...e, ticket: extractTicket(e.branch, pattern) }))
     .filter((e): e is GitEvent & { ticket: string } => e.ticket !== null);
 }

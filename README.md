@@ -4,19 +4,26 @@ An MCP (Model Context Protocol) server that generates a rough weekly [Toggl](htt
 
 ## Requirements
 
-- Node.js 18+ (the project targets ES2022 with NodeNext ESM modules; no `engines` field is enforced in `package.json`)
+- Node.js 20+ (see `engines` in `package.json`)
 - A Toggl account and an [API token](https://track.toggl.com/profile) (Profile settings → API Token)
 - One or more local git repository checkouts to scan for activity
 
-## Installation
+## Quick start
 
 ```bash
-npm install
-npm run build   # compiles src/ (TypeScript) to dist/
-npm test        # runs the vitest suite
+npm install -g github:belcarozo/toggle-mcp   # runs `npm run build` automatically (the `prepare` script)
+toggl-mcp init                               # interactive wizard - creates ~/.config/toggl-mcp/config.json
+toggl-mcp doctor                             # sanity-checks the config, repos, and ticket pattern
 ```
 
-`npm run build` emits `dist/index.js`, which is the server's entry point (declared as the `toggl-mcp` bin in `package.json`). During development you can run the server directly from source with `npm run dev` (uses `tsx`, no build step needed).
+`init` walks you through every field below with sensible detected defaults (system timezone, `git`-repo
+validation, a live picker of your real Toggl projects if `TOGGL_API_TOKEN` is already set in your shell) and
+prints a ready-to-paste MCP client registration snippet when it's done. Re-running `init` against an
+existing config pre-fills every prompt with the current value — press Enter through all of them to leave it
+unchanged, or answer just the ones you want to change.
+
+Working from a clone instead: `npm install && npm run build`, then run `node dist/index.js init`/`doctor` in
+place of the `toggl-mcp` bin below.
 
 ## Registering as an MCP server
 
@@ -42,11 +49,13 @@ Example client configuration (the exact file/format depends on your MCP client):
 
 The server reads a config file from `~/.config/toggl-mcp/config.json` by default (the path is `DEFAULT_CONFIG_PATH` in `src/config.ts`; `loadConfig()` accepts an override path if you're calling into the module directly). The file is validated with a zod schema on every load. The Toggl API token is deliberately **not** part of this file — see [Registering as an MCP server](#registering-as-an-mcp-server).
 
+The easiest way to produce a valid file is `toggl-mcp init` (see [Quick start](#quick-start)); this table
+is the reference for what each field means and for hand-editing afterward.
+
 | Field | Type | Description |
 |---|---|---|
 | `timezone` | string (IANA tz, e.g. `"America/New_York"`) | Timezone used to interpret workday/class times and to resolve week boundaries. |
 | `projectName` | string | Name of the Toggl project that generated entries are logged against. Resolved to a project ID via `toggl_whoami` / at plan/apply time. |
-| `calendarIds` | string[] (min 1) | Calendar IDs whose events the caller should supply to `plan_week`. This server has no calendar integration of its own — see [Calendar events](#calendar-events) below. |
 | `workday` | object | Your normal working hours/days — see sub-fields below. |
 | `workday.start` | string (`HH:mm`) | Workday start time, local to `timezone`. |
 | `workday.end` | string (`HH:mm`) | Workday end time, local to `timezone`. |
@@ -56,7 +65,8 @@ The server reads a config file from `~/.config/toggl-mcp/config.json` by default
 | `classes` | array (default `[]`) | Generic recurring-commitment blocks to carve out of the baseline during workday hours — **not limited to literal school classes**: use this for any recurring appointment (a class, a recurring medical/therapy appointment, gym, pickup/drop-off, etc.) that should never be counted as work time. Each entry: `{ label, day, start, end }` (`day` and times use the same weekday/`HH:mm` formats as `workday`). |
 | `nonWorkTitlePatterns` | string[] (default `[]`) | Regular expressions (as strings) matched against incoming calendar event titles; matching events are excluded from the baseline as non-work (e.g. `"\\bclass\\b"` to exclude a recurring calendar block titled "Spanish class"). |
 | `repos` | string[] (min 1) | Local filesystem paths to git repositories to scan for activity. |
-| `authorEmails` | string[] (min 1) | Git author emails counted as "yours" when scanning commits/branches in `repos`. |
+| `ticketPattern` | string (regex, default `"([A-Za-z]{2,4}-\\d+)"`) | Matched against branch names to extract a ticket ID. The default assumes Jira-style keys (`FFT-1326`); if your team uses a different shape (longer prefixes, numeric-only IDs, no hyphen), set your own pattern — `toggl-mcp init`/`doctor` preview how many of your real recent branches it matches. If the pattern has a capture group, group 1 is used as the ticket ID; otherwise the whole match is. |
+| `baseBranches` | string[] (default `["main", "master", "develop"]`) | Checkout targets treated as base/integration branches, never as billable work. Add your trunk branch name here if it isn't one of the defaults. |
 | `minEntryMinutes` | integer (min 1, default `15`) | Minimum duration for a generated time entry; shorter spans are dropped or merged. |
 | `roundToMinutes` | integer (min 1, default `15`) | Duration/boundary rounding granularity applied to generated entries. |
 | `tags` | string[] (default `["auto-baseline"]`) | Toggl tags applied to every entry this server creates. |
@@ -68,7 +78,6 @@ The server reads a config file from `~/.config/toggl-mcp/config.json` by default
 {
   "timezone": "America/New_York",
   "projectName": "Engineering",
-  "calendarIds": ["primary"],
   "workday": {
     "start": "09:00",
     "end": "17:30",
@@ -81,7 +90,8 @@ The server reads a config file from `~/.config/toggl-mcp/config.json` by default
   ],
   "nonWorkTitlePatterns": ["\\bclass\\b", "\\bappointment\\b"],
   "repos": ["/Users/you/projects/your-repo"],
-  "authorEmails": ["you@example.com"],
+  "ticketPattern": "([A-Za-z]{2,4}-\\d+)",
+  "baseBranches": ["main", "master", "develop"],
   "minEntryMinutes": 15,
   "roundToMinutes": 15,
   "tags": ["auto-baseline"],
@@ -89,11 +99,37 @@ The server reads a config file from `~/.config/toggl-mcp/config.json` by default
 }
 ```
 
-Fields with defaults (`classes`, `nonWorkTitlePatterns`, `minEntryMinutes`, `roundToMinutes`, `tags`, `createdWith`) may be omitted entirely.
+Fields with defaults (`classes`, `nonWorkTitlePatterns`, `ticketPattern`, `baseBranches`, `minEntryMinutes`, `roundToMinutes`, `tags`, `createdWith`) may be omitted entirely.
 
 ## Calendar events
 
-This server has **no calendar integration of its own**. `plan_week` accepts a `calendarEvents` array (each `{ title, start, end }`, ISO 8601 datetimes) that the MCP client is expected to supply — typically by first querying a separate calendar MCP server (e.g. a Google Calendar MCP) for the calendars listed in `calendarIds`, then passing the resulting events straight into `plan_week`.
+This server has **no calendar integration of its own**. `plan_week` accepts a `calendarEvents` array (each
+`{ title, start, end }`, ISO 8601 datetimes) that the MCP client is expected to supply — typically by first
+querying a separate calendar MCP server (e.g. a Google Calendar MCP) for whichever calendars you want
+counted, then passing the resulting events straight into `plan_week`.
+
+## Configuration CLI
+
+- **`toggl-mcp init`** (`node dist/index.js init` from a clone) — interactive wizard; creates the config if
+  none exists, or updates it in place (backing up the previous version to `config.json.bak`) if one does.
+  Flags: `--config <path>` (a non-default location), `--print` (print the resulting JSON instead of
+  writing it).
+- **`toggl-mcp doctor`** — checks the config file, that each repo path is a real git repository, that
+  `ticketPattern` actually matches recent branches in those repos (the most common silent-failure mode —
+  a mismatched pattern produces an empty baseline with no error), that each repo's default branch is
+  covered by `baseBranches`, and that `TOGGL_API_TOKEN` is set. Flags: `--config <path>`, `--online` (also
+  verify live Toggl connectivity — costs API calls against the 30-requests/hour `/me` limit, so it's opt-in).
+- Running the built entry point with **no arguments** starts the MCP stdio server, unchanged from before
+  the CLI existed — existing MCP client registrations keep working with no changes.
+- The CLI never prompts for or writes `TOGGL_API_TOKEN` — see [Registering as an MCP server](#registering-as-an-mcp-server).
+
+## Known limitations
+
+- The "generic placeholder commit message" heuristic (`fix`, `wip`, `tmp`, ...) used to prefer a branch-name
+  description over an uninformative commit message is a fixed word list in `src/ticket.ts`, not
+  configurable.
+- `git_activity`/`plan_week` scan every commit reached by a checkout in the queried window — there's no
+  per-author filtering, since `git reflog` on your own local checkout is inherently your own activity.
 
 ## MCP tools
 
@@ -126,4 +162,4 @@ npm test         # single run
 npm run test:watch
 ```
 
-Key modules: `src/config.ts` (config loading/validation), `src/git.ts` (git reflog reading), `src/ticket.ts` (ticket ID extraction from branch names), `src/time.ts` (timezone-aware week/date resolution), `src/toggl.ts` (Toggl API client), `src/week.ts` (day/week plan construction), `src/plan.ts`, `src/types.ts`.
+Key modules: `src/config.ts` (config loading/validation), `src/git.ts` (git reflog reading), `src/ticket.ts` (ticket ID extraction from branch names), `src/time.ts` (timezone-aware week/date resolution), `src/toggl.ts` (Toggl API client), `src/week.ts` (day/week plan construction), `src/plan.ts`, `src/types.ts`, `src/defaults.ts` (the today-preserving defaults for `ticketPattern`/`baseBranches`), and `src/cli/` (the `init`/`doctor` commands).

@@ -13,7 +13,6 @@ const ZONE = "America/Montevideo";
 const baseConfig: Config = {
   timezone: ZONE,
   projectName: "Mobile Development People Inc",
-  calendarIds: ["belen.carozo@people.inc"],
   workday: { start: "10:00", end: "18:00", lunchMinutes: 30, lunchAt: "13:00", days: ["mon", "tue", "wed", "thu", "fri"] },
   classes: [
     { label: "Solfeggio class", day: "mon", start: "14:00", end: "15:30" },
@@ -24,7 +23,8 @@ const baseConfig: Config = {
   ],
   nonWorkTitlePatterns: ["\\bclass\\b"],
   repos: ["/fake/repo"],
-  authorEmails: ["belen.carozo@people.inc"],
+  ticketPattern: "([A-Za-z]{2,4}-\\d+)",
+  baseBranches: ["main", "master", "develop"],
   minEntryMinutes: 15,
   roundToMinutes: 15,
   tags: ["auto-baseline"],

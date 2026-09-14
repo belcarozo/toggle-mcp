@@ -110,7 +110,10 @@ server.registerTool(
     try {
       const config = loadConfig();
       const { weekStart, weekEnd } = resolveRange(config, input);
-      const events = withTickets(readAllRepos(config.repos, weekStart, weekEnd, config.timezone)).sort(
+      const events = withTickets(
+        readAllRepos(config.repos, weekStart, weekEnd, config.timezone, config.baseBranches),
+        config.ticketPattern,
+      ).sort(
         (a, b) => a.timestamp.toMillis() - b.timestamp.toMillis(),
       );
       return textResult({
@@ -138,7 +141,7 @@ server.registerTool(
     title: "Plan a week's Toggl baseline",
     description:
       "Build a baseline time-entry proposal for a week from git activity and calendar events. Writes nothing to Toggl. " +
-      "Calendar events must be supplied by the caller (e.g. from the Google Calendar MCP) for calendarIds in config.json. " +
+      "Calendar events must be supplied by the caller (e.g. from the Google Calendar MCP) for the calendars this user wants counted. " +
       "Days that already have Toggl entries are skipped. Pass the returned object straight to apply_week to write it.",
     // A flat object, not weekSelectionSchema.and(...): zod's intersection
     // compiles to a JSON Schema `allOf`, which several tool-schema consumers
@@ -162,7 +165,10 @@ server.registerTool(
       const client = new TogglClient(requireApiToken());
       const me = await client.me();
       const projectId = await client.findProjectId(me.default_workspace_id, config.projectName);
-      const gitEvents = withTickets(readAllRepos(config.repos, weekStart, weekEnd, config.timezone));
+      const gitEvents = withTickets(
+        readAllRepos(config.repos, weekStart, weekEnd, config.timezone, config.baseBranches),
+        config.ticketPattern,
+      );
       const existingEntries = await client.listTimeEntries(weekStart, weekEnd);
 
       const weekPlan = buildWeekPlan({
@@ -238,8 +244,16 @@ server.registerTool(
 );
 
 async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  const argv = process.argv.slice(2);
+  if (argv.length === 0) {
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+    return;
+  }
+  // Dynamic import: keeps readline (and its stdin usage) out of the server's
+  // cold start, since the two modes must never share a process.
+  const { runCli } = await import("./cli/main.js");
+  process.exitCode = await runCli(argv);
 }
 
 main().catch((err) => {

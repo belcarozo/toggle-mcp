@@ -69,6 +69,7 @@ function assignTicket(
   blockStart: DateTime,
   dayEvents: (GitEvent & { ticket: string })[],
   priorTicket: TicketAttribution | null,
+  ticketPattern: string,
 ): TicketAttribution | null {
   const beforeOrAt = dayEvents
     .filter((e) => e.timestamp.toMillis() <= blockStart.toMillis())
@@ -77,7 +78,7 @@ function assignTicket(
   const winner = beforeOrAt[0] ?? dominantTicket(dayEvents);
   if (winner) {
     const sameTicketEvents = dayEvents.filter((e) => e.ticket === winner.ticket);
-    return { ticket: winner.ticket, description: bestDescriptionFor(winner.ticket, sameTicketEvents) };
+    return { ticket: winner.ticket, description: bestDescriptionFor(winner.ticket, sameTicketEvents, ticketPattern) };
   }
   return priorTicket;
 }
@@ -167,7 +168,7 @@ export function planDay(params: PlanDayParams): PlanDayResult {
   }
 
   for (const block of freeBlocks) {
-    const attribution = assignTicket(block.start, dayEvents, carryTicket);
+    const attribution = assignTicket(block.start, dayEvents, carryTicket, config.ticketPattern);
     const rounded = roundInterval(block, config.roundToMinutes);
     if (attribution) {
       entries.push(toEntry("ticket", attribution.description, rounded, config.tags));

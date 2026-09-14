@@ -27,12 +27,14 @@ export interface WorkdayConfig {
 export interface Config {
   timezone: string;
   projectName: string;
-  calendarIds: string[];
   workday: WorkdayConfig;
   classes: ClassBlock[];
   nonWorkTitlePatterns: string[];
   repos: string[];
-  authorEmails: string[];
+  /** Regex (as a string) matched against branch names to extract a ticket ID, e.g. "([A-Za-z]{2,4}-\\d+)". */
+  ticketPattern: string;
+  /** Checkout targets treated as base/integration branches, never as billable work. */
+  baseBranches: string[];
   minEntryMinutes: number;
   roundToMinutes: number;
   tags: string[];
