@@ -11,7 +11,7 @@ An MCP (Model Context Protocol) server that generates a rough weekly [Toggl](htt
 ## Quick start
 
 ```bash
-npm install -g github:belcarozo/toggle-mcp   # runs `npm run build` automatically (the `prepare` script)
+npm install -g github:belcarozo/toggle-mcp   # dist/ ships prebuilt in the repo, so no build step runs
 toggl-mcp init                               # interactive wizard - creates ~/.config/toggl-mcp/config.json
 toggl-mcp doctor                             # sanity-checks the config, repos, and ticket pattern
 ```
