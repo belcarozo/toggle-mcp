@@ -28,15 +28,33 @@ export interface TicketAttribution {
   description: string;
 }
 
+const LEADING_TICKET = /^[A-Za-z]{2,4}-\d+\s*:?\s*/;
+const LOW_INFORMATION_MESSAGE = /^(fix(es|ed)?|wip|update[sd]?|tmp|temp|misc|checkpoint|changes|cleanup)\.?$/i;
+
+/**
+ * A commit message that's just a generic placeholder ("fix", "wip", ...)
+ * carries no more information than the ticket id itself, so the branch-name
+ * fallback (which at least names the change) is more useful to show.
+ */
+function isLowInformation(description: string): boolean {
+  const stripped = description.replace(LEADING_TICKET, "").trim();
+  return LOW_INFORMATION_MESSAGE.test(stripped);
+}
+
 /**
  * Resolve the best available description for a ticket from a set of git
  * events attributed to it, most recent first: a real commit message wins
- * over the branch-name fallback, since it's the more informative of the two.
+ * over the branch-name fallback, since it's the more informative of the two -
+ * unless that commit message is itself a generic placeholder, in which case
+ * the branch name is more informative.
  */
 export function bestDescriptionFor(ticket: string, events: GitEvent[]): string {
   const sorted = [...events].sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
   const withCommitMessage = sorted.find(
-    (e) => (e.kind === "commit" || e.kind === "commit-merge" || e.kind === "commit-amend") && e.description,
+    (e) =>
+      (e.kind === "commit" || e.kind === "commit-merge" || e.kind === "commit-amend") &&
+      e.description &&
+      !isLowInformation(e.description),
   );
   const raw = withCommitMessage?.description ?? describeFromBranch(sorted[0].branch, ticket);
   // Guarantee the ticket is visible even if the winning commit message didn't

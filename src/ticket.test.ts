@@ -55,4 +55,17 @@ describe("bestDescriptionFor", () => {
     const events = [event({ kind: "commit-merge", description: "Merged main into fix/FFT-1326-android-image" })];
     expect(bestDescriptionFor("FFT-1326", events)).toBe("FFT-1326: Merged main into fix/FFT-1326-android-image");
   });
+
+  it("falls back to the branch slug when the commit message is a generic placeholder", () => {
+    const events = [event({ kind: "commit", description: "FFT-1326: fix" })];
+    expect(bestDescriptionFor("FFT-1326", events)).toBe("FFT-1326: android image");
+  });
+
+  it("prefers an earlier real commit message over a later generic one", () => {
+    const events = [
+      event({ kind: "commit", description: "FFT-1326: removes prefetch", timestamp: DateTime.fromISO("2026-08-24T09:00:00") }),
+      event({ kind: "commit", description: "wip", timestamp: DateTime.fromISO("2026-08-24T11:00:00") }),
+    ];
+    expect(bestDescriptionFor("FFT-1326", events)).toBe("FFT-1326: removes prefetch");
+  });
 });
