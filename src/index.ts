@@ -142,7 +142,8 @@ server.registerTool(
     description:
       "Build a baseline time-entry proposal for a week from git activity and calendar events. Writes nothing to Toggl. " +
       "Calendar events must be supplied by the caller (e.g. from the Google Calendar MCP) for the calendars this user wants counted. " +
-      "Days that already have Toggl entries are skipped. Pass the returned object straight to apply_week to write it.",
+      "Days that already have Toggl entries are skipped. Each commit ends its own entry, so a busy day can produce many " +
+      "short entries rather than one. Pass the returned object straight to apply_week to write it.",
     // A flat object, not weekSelectionSchema.and(...): zod's intersection
     // compiles to a JSON Schema `allOf`, which several tool-schema consumers
     // (this one's deferred-tool indexing included) silently drop rather than
@@ -194,7 +195,8 @@ server.registerTool(
     description:
       "Write the exact proposal returned by plan_week to Toggl. Re-checks each day for existing entries immediately " +
       "before writing (in case something was tracked between plan_week and this call) and skips it if so. " +
-      "Days marked `skip` in the input are never written.",
+      "Days marked `skip` in the input are never written. Writes one entry at a time, throttled to Toggl's rate limit, " +
+      "so a plan with many entries (a commit-heavy week) can take well over a minute.",
     inputSchema: z.object({
       workspaceId: z.number(),
       projectId: z.number(),

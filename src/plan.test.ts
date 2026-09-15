@@ -199,6 +199,154 @@ describe("planDay - ticket attribution fallbacks", () => {
   });
 });
 
+describe("planDay - splitting a free block by commits", () => {
+  // lunchMinutes: 0 collapses the workday into a single free block (10:00-18:00) with no
+  // lunch-driven split, isolating the commit-splitting behavior from lunch/class carving.
+  const oneBlockConfig: Config = { ...baseConfig, workday: { ...baseConfig.workday, lunchMinutes: 0 } };
+
+  it("splits one block at each commit: 3 commits (2 tickets) -> 4 entries, each with its own message", () => {
+    const { plan, carryTicket } = planDay({
+      date: "2026-08-25", // Tue, no classes
+      config: oneBlockConfig,
+      gitEvents: [
+        gitEvent("2026-08-25", "11:00", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "FOO-1: added endpoint" }),
+        gitEvent("2026-08-25", "13:00", "fix/BAR-2-y", "BAR-2", { kind: "commit", description: "BAR-2: fixed crash" }),
+        gitEvent("2026-08-25", "15:00", "fix/BAR-2-y", "BAR-2", { kind: "commit", description: "BAR-2: added tests" }),
+      ],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    });
+
+    expect(plan.entries).toHaveLength(4);
+    expect(DateTime.fromISO(plan.entries[0].endLocal).toFormat("HH:mm")).toBe("11:00");
+    expect(plan.entries[1]).toMatchObject({ description: "FOO-1: added endpoint" });
+    expect(DateTime.fromISO(plan.entries[1].endLocal).toFormat("HH:mm")).toBe("13:00");
+    expect(plan.entries[2]).toMatchObject({ description: "BAR-2: fixed crash" });
+    expect(DateTime.fromISO(plan.entries[2].endLocal).toFormat("HH:mm")).toBe("15:00");
+    expect(plan.entries[3]).toMatchObject({ description: "BAR-2: added tests" });
+    expect(DateTime.fromISO(plan.entries[3].endLocal).toFormat("HH:mm")).toBe("18:00");
+    // several commits on the SAME ticket (BAR-2) still keep their own distinct messages
+    // instead of collapsing into one "best" description for the ticket - the user's ask.
+    expect(plan.entries[2].description).not.toBe(plan.entries[3].description);
+    expect(carryTicket).toEqual({ ticket: "BAR-2", description: "BAR-2: added tests" });
+  });
+
+  it("splitting a block does not change the day's total tracked time", () => {
+    const oneCommit = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "FOO-1: work" })],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    }).plan;
+    const fiveCommits = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [
+        gitEvent("2026-08-25", "10:30", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "a" }),
+        gitEvent("2026-08-25", "11:00", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "b" }),
+        gitEvent("2026-08-25", "12:00", "fix/BAR-2-y", "BAR-2", { kind: "commit", description: "c" }),
+        gitEvent("2026-08-25", "14:00", "fix/BAR-2-y", "BAR-2", { kind: "commit", description: "d" }),
+        gitEvent("2026-08-25", "16:00", "fix/BAR-2-y", "BAR-2", { kind: "commit", description: "e" }),
+      ],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    }).plan;
+    expect(fiveCommits.totalSeconds).toBe(oneCommit.totalSeconds);
+    expect(fiveCommits.entries.length).toBeGreaterThan(oneCommit.entries.length);
+  });
+
+  it("entries inside a split block are contiguous - no gaps or overlaps introduced by splitting", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [
+        gitEvent("2026-08-25", "11:00", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "a" }),
+        gitEvent("2026-08-25", "14:00", "fix/BAR-2-y", "BAR-2", { kind: "commit", description: "b" }),
+      ],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    });
+    for (let i = 1; i < plan.entries.length; i++) {
+      expect(plan.entries[i].startLocal).toBe(plan.entries[i - 1].endLocal);
+    }
+  });
+
+  it("an amend right after its own commit, keeping the same message, merges back into one entry", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [
+        gitEvent("2026-08-25", "11:00", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "FOO-1: same text" }),
+        gitEvent("2026-08-25", "11:05", "fix/FOO-1-x", "FOO-1", { kind: "commit-amend", description: "FOO-1: same text" }),
+      ],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    });
+    // FOO-1 is the only ticket all day, so the fallback segment (10:00-11:00) also resolves to
+    // "FOO-1: same text" - all three segments (fallback, commit, amend) merge into a single entry.
+    expect(plan.entries).toHaveLength(1);
+    expect(plan.entries[0]).toMatchObject({ description: "FOO-1: same text" });
+    expect(DateTime.fromISO(plan.entries[0].startLocal).toFormat("HH:mm")).toBe("10:00");
+    expect(DateTime.fromISO(plan.entries[0].endLocal).toFormat("HH:mm")).toBe("18:00");
+  });
+
+  it("a pull/reset event inside a block does not split it - only commits do", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [
+        gitEvent("2026-08-25", "11:00", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "FOO-1: work" }),
+        gitEvent("2026-08-25", "14:00", "fix/FOO-1-x", "FOO-1", { kind: "pull", description: null }),
+        gitEvent("2026-08-25", "16:00", "fix/BAR-2-y", "BAR-2", { kind: "commit", description: "BAR-2: other work" }),
+      ],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    });
+    // If the pull at 14:00 split the block, there would be a boundary there; instead the only
+    // boundary is at 16:00, where the real (BAR-2) commit is.
+    expect(plan.entries).toHaveLength(2);
+    expect(plan.entries[0]).toMatchObject({ description: "FOO-1: work" });
+    expect(DateTime.fromISO(plan.entries[0].endLocal).toFormat("HH:mm")).toBe("16:00");
+    expect(plan.entries[1]).toMatchObject({ description: "BAR-2: other work" });
+  });
+
+  it("a commit that falls during lunch never gets its own entry, but still labels the blocks around it", () => {
+    const { plan } = planDay({
+      date: "2026-08-25", // baseConfig lunch is 13:00-13:30
+      config: baseConfig,
+      gitEvents: [gitEvent("2026-08-25", "13:10", "fix/FOO-1-x", "FOO-1", { kind: "commit", description: "FOO-1: over lunch" })],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    });
+    expect(plan.entries.every((e) => e.description === "FOO-1: over lunch")).toBe(true);
+    expect(plan.entries).toHaveLength(2); // morning block + afternoon block, lunch itself carved out
+    expect(plan.totalSeconds).toBe(7.5 * 3600); // same total as the plain single-event-before-window case
+  });
+
+  it("a zero-commit block behaves exactly as before splitting existed (backcompat gate)", () => {
+    const { plan, carryTicket } = planDay({
+      date: "2026-08-25",
+      config: baseConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1-x", "FFT-1", { kind: "commit", description: "FFT-1: work" })],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+    });
+    expect(plan.entries).toHaveLength(2); // morning block, afternoon block - one entry each, as today
+    expect(plan.entries.every((e) => e.description === "FFT-1: work")).toBe(true);
+    expect(plan.totalSeconds).toBe(7.5 * 3600);
+    expect(carryTicket).toEqual({ ticket: "FFT-1", description: "FFT-1: work" });
+  });
+});
+
 describe("planDay - skip conditions", () => {
   it("skips weekends as not-a-workday", () => {
     const { plan } = planDay({

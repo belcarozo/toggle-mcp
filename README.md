@@ -69,7 +69,7 @@ is the reference for what each field means and for hand-editing afterward.
 | `repos` | string[] (min 1) | Local filesystem paths to git repositories to scan for activity. |
 | `ticketPattern` | string (regex, default `"([A-Za-z]{2,4}-\\d+)"`) | Matched against branch names to extract a ticket ID. The default assumes Jira-style keys (`FFT-1326`); if your team uses a different shape (longer prefixes, numeric-only IDs, no hyphen), set your own pattern — `toggl-mcp init`/`doctor` preview how many of your real recent branches it matches. If the pattern has a capture group, group 1 is used as the ticket ID; otherwise the whole match is. |
 | `baseBranches` | string[] (default `["main", "master", "develop"]`) | Checkout targets treated as base/integration branches, never as billable work. Add your trunk branch name here if it isn't one of the defaults. |
-| `minEntryMinutes` | integer (min 1, default `15`) | Minimum duration for a generated time entry; shorter spans are dropped or merged. |
+| `minEntryMinutes` | integer (min 1, default `15`) | Minimum duration for a free block (workday time left over after meetings/lunch/classes) to produce any entry at all. Once a block clears this bar, it can still be split into shorter per-commit entries — see [Known limitations](#known-limitations). |
 | `roundToMinutes` | integer (min 1, default `15`) | Duration/boundary rounding granularity applied to generated entries. |
 | `tags` | string[] (default `[]`) | Toggl tags applied to every entry this server creates. |
 | `createdWith` | string (default `"toggl-mcp"`) | Value sent as Toggl's `created_with` field on created entries. |
@@ -132,6 +132,11 @@ counted, then passing the resulting events straight into `plan_week`.
   configurable.
 - `git_activity`/`plan_week` scan every commit reached by a checkout in the queried window — there's no
   per-author filtering, since `git reflog` on your own local checkout is inherently your own activity.
+- Within a free block, each commit ends its own entry and starts the next, so a block with several commits
+  (even to the same ticket) becomes several entries, one per commit message — `minEntryMinutes` does not
+  merge or drop these; it only decides whether the block was worth entering in the first place. Only
+  `commit`/`commit (merge)`/`commit (amend)` reflog entries split a block; `pull` and `reset` don't, since
+  they carry no message.
 
 ## MCP tools
 
@@ -142,10 +147,10 @@ Resolves your Toggl account, default workspace, and the `projectName` from confi
 Debug tool — makes no network calls. Shows the raw git reflog events (checkouts, commits, merges, amends, pulls, resets) across the configured `repos` for a date range, along with the ticket ID and description resolved from each branch/commit. Use this to sanity-check ticket attribution before trusting `plan_week`'s output.
 
 ### `plan_week`
-Builds a baseline time-entry proposal for a week from git activity plus the `calendarEvents` you supply. Writes nothing to Toggl. Days that already have existing Toggl entries are skipped (`skip: "already-tracked"`), as are non-workdays (`skip: "not-a-workday"`). Returns a `weekPlan` object (along with the resolved `workspaceId`/`projectId`) intended to be passed straight through to `apply_week`.
+Builds a baseline time-entry proposal for a week from git activity plus the `calendarEvents` you supply. Writes nothing to Toggl. Days that already have existing Toggl entries are skipped (`skip: "already-tracked"`), as are non-workdays (`skip: "not-a-workday"`). A day with several commits produces several entries, not one — each commit ends its own entry, so a busy day's `entries` array can be long. Returns a `weekPlan` object (along with the resolved `workspaceId`/`projectId`) intended to be passed straight through to `apply_week`.
 
 ### `apply_week`
-Writes the exact `weekPlan` (plus `workspaceId`/`projectId`) returned by `plan_week` to Toggl. Immediately before writing each day, it re-checks Toggl for existing entries on that date — in case something was tracked between the `plan_week` call and now — and skips the day if so. Days already marked `skip` in the input are never written.
+Writes the exact `weekPlan` (plus `workspaceId`/`projectId`) returned by `plan_week` to Toggl. Immediately before writing each day, it re-checks Toggl for existing entries on that date — in case something was tracked between the `plan_week` call and now — and skips the day if so. Days already marked `skip` in the input are never written. Requests are throttled to Toggl's rate limit (~1 entry/second), one POST per entry, so a plan with many entries can take a while — a day with 20+ commits can take tens of seconds on its own.
 
 Both `plan_week` and `apply_week` accept a week selector: either `week: "this"` (Monday through today) / `week: "last"` (previous Monday-Friday), or an explicit `startDate`/`endDate` pair (`YYYY-MM-DD`).
 
