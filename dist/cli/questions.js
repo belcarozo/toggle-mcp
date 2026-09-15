@@ -16,7 +16,7 @@ export const STARTER_CONFIG = {
     baseBranches: [...DEFAULT_BASE_BRANCHES],
     minEntryMinutes: 15,
     roundToMinutes: 15,
-    tags: ["auto-baseline"],
+    tags: [],
     createdWith: "toggl-mcp",
 };
 function expandHome(path) {

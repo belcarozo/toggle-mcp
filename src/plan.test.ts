@@ -27,7 +27,7 @@ const baseConfig: Config = {
   baseBranches: ["main", "master", "develop"],
   minEntryMinutes: 15,
   roundToMinutes: 15,
-  tags: ["auto-baseline"],
+  tags: [],
   createdWith: "toggl-mcp",
 };
 

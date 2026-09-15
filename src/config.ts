@@ -43,7 +43,7 @@ export const configSchema = z.object({
   baseBranches: z.array(z.string().min(1)).default(() => [...DEFAULT_BASE_BRANCHES]),
   minEntryMinutes: z.number().int().min(1).default(15),
   roundToMinutes: z.number().int().min(1).default(15),
-  tags: z.array(z.string()).default(() => ["auto-baseline"]),
+  tags: z.array(z.string()).default(() => []),
   createdWith: z.string().default("toggl-mcp"),
 });
 

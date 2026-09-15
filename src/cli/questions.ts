@@ -17,7 +17,7 @@ export const STARTER_CONFIG: Config = {
   baseBranches: [...DEFAULT_BASE_BRANCHES],
   minEntryMinutes: 15,
   roundToMinutes: 15,
-  tags: ["auto-baseline"],
+  tags: [],
   createdWith: "toggl-mcp",
 };
 
