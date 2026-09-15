@@ -10,33 +10,22 @@ An MCP (Model Context Protocol) server that generates a rough weekly [Toggl](htt
 
 ## Quick start
 
-Clone the repo and link it rather than installing straight from the git URL — `npm install -g github:...`
-routes through npm's global-install-from-git codepath, which has proven unreliable (it can leave the
-package symlinked into an ephemeral cache tmp directory instead of a real install, producing a "command
-not found" `toggl-mcp` that looks installed but isn't). A local clone avoids that entirely and doubles as
-your update mechanism (`git pull`).
-
 ```bash
 git clone git@github.com:belcarozo/toggl-mcp.git
 cd toggl-mcp
 npm install
-npm link                                     # symlinks the `toggl-mcp` command into your npm global bin
+npm link                                     # adds the `toggl-mcp` command to your PATH
 toggl-mcp init                               # interactive wizard - creates ~/.config/toggl-mcp/config.json
 toggl-mcp doctor                             # sanity-checks the config, repos, and ticket pattern
 ```
 
-`init` walks you through every field below with sensible detected defaults (system timezone, `git`-repo
-validation). If `TOGGL_API_TOKEN` isn't already set in your shell, it asks for it up front — entering it
-there only holds it in memory for the rest of the `init` session (to look up your real workspace/projects
-for the picker below); it's never written to `config.json`, and leaving it blank just falls back to typing
-the project name by hand. `init` prints a ready-to-paste MCP client registration snippet when it's done.
-Re-running `init` against an existing config pre-fills every prompt with the current value — press Enter
-through all of them to leave it unchanged, or answer just the ones you want to change. The project name is
-required and `init` will keep re-asking until you give it a non-empty value.
+`init` walks you through every field below with sensible detected defaults, asks for your Toggl API token
+up front if it isn't already set in your shell (used only to look up your real projects for the picker,
+never saved to `config.json`), and prints a ready-to-paste MCP client registration snippet when it's done.
+Re-running `init` against an existing config pre-fills every prompt — press Enter to keep a value, or
+answer just the ones you want to change.
 
-`dist/` ships prebuilt and committed, so the steps above don't need to compile anything. After pulling a
-repo update, run `npm run build` to pick up source changes (needs the devDependencies from `npm install`
-above).
+After pulling a repo update, run `npm run build` to rebuild `dist/`.
 
 ## Registering as an MCP server
 
