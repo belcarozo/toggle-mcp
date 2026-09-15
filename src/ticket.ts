@@ -26,6 +26,8 @@ export function describeFromBranch(branch: string, ticket: string): string {
 export interface TicketAttribution {
   ticket: string;
   description: string;
+  /** True when `description` came from the branch-slug fallback, not a real commit message - the case worth enriching with outside context. */
+  weak?: boolean;
 }
 
 const LOW_INFORMATION_MESSAGE = /^(fix(es|ed)?|wip|update[sd]?|tmp|temp|misc|checkpoint|changes|cleanup)\.?$/i;
@@ -45,17 +47,26 @@ function isLowInformation(description: string, pattern: string): boolean {
 }
 
 /**
- * Resolve the best available description for a ticket from a set of git
+ * Guarantee the ticket is visible even if `raw` didn't happen to start with it
+ * (e.g. a generic "Merged main into X" commit message, or a context signal's text).
+ */
+export function withTicketPrefix(ticket: string, raw: string): string {
+  return new RegExp(`^${ticket}\\b`, "i").test(raw) ? raw : `${ticket}: ${raw}`;
+}
+
+/**
+ * Resolve the best available attribution for a ticket from a set of git
  * events attributed to it, most recent first: a real commit message wins
  * over the branch-name fallback, since it's the more informative of the two -
  * unless that commit message is itself a generic placeholder, in which case
- * the branch name is more informative.
+ * the branch name is more informative. `weak: true` marks the fallback case,
+ * so callers can tell a real commit message from a guess worth enriching.
  */
-export function bestDescriptionFor(
+export function attributeTicket(
   ticket: string,
   events: GitEvent[],
   pattern: string = DEFAULT_TICKET_PATTERN,
-): string {
+): TicketAttribution {
   const sorted = [...events].sort((a, b) => b.timestamp.toMillis() - a.timestamp.toMillis());
   const withCommitMessage = sorted.find(
     (e) =>
@@ -63,10 +74,19 @@ export function bestDescriptionFor(
       e.description &&
       !isLowInformation(e.description, pattern),
   );
-  const raw = withCommitMessage?.description ?? describeFromBranch(sorted[0].branch, ticket);
-  // Guarantee the ticket is visible even if the winning commit message didn't
-  // happen to start with it (e.g. a generic "Merged main into X" message).
-  return new RegExp(`^${ticket}\\b`, "i").test(raw) ? raw : `${ticket}: ${raw}`;
+  if (withCommitMessage?.description) {
+    return { ticket, description: withTicketPrefix(ticket, withCommitMessage.description) };
+  }
+  return { ticket, description: withTicketPrefix(ticket, describeFromBranch(sorted[0].branch, ticket)), weak: true };
+}
+
+/** Thin string wrapper over `attributeTicket`, kept for callers that only need the text. */
+export function bestDescriptionFor(
+  ticket: string,
+  events: GitEvent[],
+  pattern: string = DEFAULT_TICKET_PATTERN,
+): string {
+  return attributeTicket(ticket, events, pattern).description;
 }
 
 /** Attach `ticket` to every event whose branch resolves to one, dropping the rest. */

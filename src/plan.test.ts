@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { describe, expect, it } from "vitest";
+import type { ContextSignal } from "./context.js";
 import { planDay } from "./plan.js";
 import { buildWeekPlan } from "./week.js";
 import type { CalendarEventInput, Config, ExistingTimeEntry, GitEvent } from "./types.js";
@@ -344,6 +345,170 @@ describe("planDay - splitting a free block by commits", () => {
     expect(plan.entries.every((e) => e.description === "FFT-1: work")).toBe(true);
     expect(plan.totalSeconds).toBe(7.5 * 3600);
     expect(carryTicket).toEqual({ ticket: "FFT-1", description: "FFT-1: work" });
+  });
+});
+
+function contextSignal(overrides: Partial<ContextSignal> = {}): ContextSignal {
+  return {
+    start: DateTime.fromFormat("2026-08-25 10:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+    end: DateTime.fromFormat("2026-08-25 18:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+    repo: "myr",
+    branch: null,
+    ticket: null,
+    text: "context text",
+    source: "session",
+    ...overrides,
+  };
+}
+
+describe("planDay - context signal enrichment", () => {
+  // lunchMinutes: 0 collapses the workday into a single free block, same as the
+  // commit-splitting describe block above - isolating enrichment from lunch/class carving.
+  const oneBlockConfig: Config = { ...baseConfig, workday: { ...baseConfig.workday, lunchMinutes: 0 } };
+
+  it("replaces a weak branch-slug description with an overlapping signal's text, when the signal names the same ticket", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1390-something-went-wrong", "FFT-1390")], // checkout only - weak
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+      contextSignals: [contextSignal({ ticket: "FFT-1390", text: "Debug Android share sheet crash" })],
+    });
+    expect(plan.entries.every((e) => e.description === "FFT-1390: Debug Android share sheet crash")).toBe(true);
+  });
+
+  it("leaves a weak description unchanged when the only overlapping signal names a different ticket", () => {
+    // Regression: a session can touch several branches under one auto-generated title, so a
+    // signal's ticket (from its own branch) and its text (the session-wide title) can disagree
+    // with the ticket being enriched here - that must never overwrite a good enough description
+    // with unrelated text just because it happened to overlap in time.
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1371-blurry-images", "FFT-1371")],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+      contextSignals: [contextSignal({ ticket: null, text: "Android share extension loading issue" })],
+    });
+    expect(plan.entries.every((e) => e.description === "FFT-1371: blurry images")).toBe(true);
+  });
+
+  it("promotes a fully unassigned segment to a ticket entry when the signal names one", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [], // no git signal at all
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+      contextSignals: [contextSignal({ ticket: "FFT-1402", text: "FFT-1402 systematic debugging" })],
+    });
+    expect(plan.entries).toHaveLength(1);
+    expect(plan.entries[0].kind).toBe("ticket");
+    expect(plan.entries[0].description).toBe("FFT-1402 systematic debugging");
+  });
+
+  it("keeps a segment unassigned but appends the signal's text when it names no ticket", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+      contextSignals: [contextSignal({ ticket: null, text: "Explored Claude Haiku model options" })],
+    });
+    expect(plan.entries).toHaveLength(1);
+    expect(plan.entries[0].kind).toBe("unassigned");
+    expect(plan.entries[0].description).toBe("(unassigned - fill in by hand) — Explored Claude Haiku model options");
+  });
+
+  it("never touches a description that came from a real commit message, even with an overlapping signal", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1-x", "FFT-1", { kind: "commit", description: "FFT-1: removes prefetch" })],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+      contextSignals: [contextSignal({ ticket: "FFT-1", text: "some noisy session title" })],
+    });
+    expect(plan.entries.every((e) => e.description === "FFT-1: removes prefetch")).toBe(true);
+  });
+
+  it("leaves a weak description unchanged when no signal overlaps its interval", () => {
+    const { plan } = planDay({
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1390-something-went-wrong", "FFT-1390")],
+      calendarEvents: [],
+      existingEntries: [],
+      priorTicket: null,
+      contextSignals: [
+        contextSignal({
+          start: DateTime.fromFormat("2026-08-26 10:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+          end: DateTime.fromFormat("2026-08-26 14:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+          text: "different day",
+        }),
+      ],
+    });
+    expect(plan.entries[0].description).toBe("FFT-1390: something went wrong");
+  });
+
+  it("a later day with no git signal of its own gets its own fresher signal, not a stale one carried from an earlier day's enrichment", () => {
+    // Regression: an enriched (weak) attribution must stay `weak: true` so it's still
+    // eligible for its own lookup when carried forward via priorTicket/carryTicket - otherwise
+    // the first day's narrow-window signal freezes into every later gap on the same ticket.
+    const weekPlan = buildWeekPlan({
+      weekStart: "2026-08-24", // Mon
+      weekEnd: "2026-08-25", // Tue
+      config: oneBlockConfig,
+      gitEvents: [gitEvent("2026-08-24", "09:00", "fix/FFT-1390-something-went-wrong", "FFT-1390")], // Monday only, weak
+      calendarEvents: [],
+      existingEntries: [],
+      contextSignals: [
+        // Spans the whole workday, not just a slice of it: baseConfig carves a Monday class
+        // (14:00-15:30) out of the workday, splitting it into two free blocks - a narrower
+        // window here would leave the second block unenriched for reasons unrelated to the
+        // cross-day staleness bug this test targets.
+        contextSignal({
+          start: DateTime.fromFormat("2026-08-24 10:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+          end: DateTime.fromFormat("2026-08-24 18:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+          ticket: "FFT-1390",
+          text: "Debug Android share sheet crash",
+        }),
+        contextSignal({
+          start: DateTime.fromFormat("2026-08-25 10:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+          end: DateTime.fromFormat("2026-08-25 18:00", "yyyy-MM-dd HH:mm", { zone: ZONE }),
+          ticket: "FFT-1390",
+          text: "Ship the Android share sheet fix to prod",
+        }),
+      ],
+    });
+
+    const [monday, tuesday] = weekPlan.days;
+    expect(monday.entries.every((e) => e.description === "FFT-1390: Debug Android share sheet crash")).toBe(true);
+    // Tuesday has zero git signal, so it falls back to priorTicket - but it must still pick up
+    // its OWN overlapping signal, not freeze in Monday's stale, narrower-window text.
+    expect(tuesday.entries.every((e) => e.description === "FFT-1390: Ship the Android share sheet fix to prod")).toBe(true);
+  });
+
+  it("backcompat: omitting contextSignals behaves exactly as if an empty array were given", () => {
+    const args = {
+      date: "2026-08-25",
+      config: oneBlockConfig,
+      gitEvents: [gitEvent("2026-08-25", "09:00", "fix/FFT-1390-something-went-wrong", "FFT-1390")],
+      calendarEvents: [] as CalendarEventInput[],
+      existingEntries: [] as ExistingTimeEntry[],
+      priorTicket: null,
+    };
+    const withUndefined = planDay(args).plan;
+    const withEmpty = planDay({ ...args, contextSignals: [] }).plan;
+    expect(withUndefined).toEqual(withEmpty);
+    expect(withUndefined.entries[0].description).toBe("FFT-1390: something went wrong");
   });
 });
 

@@ -2,12 +2,25 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
 import { z } from "zod";
+import { signalsFromNotes } from "./context.js";
 import { DEFAULT_CONFIG_PATH, loadConfig, requireApiToken } from "./config.js";
 import { readAllRepos } from "./git.js";
 import { resolveWeek } from "./time.js";
+import { readSessions } from "./transcripts.js";
 import { TogglClient } from "./toggl.js";
 import { withTickets } from "./ticket.js";
 import { buildWeekPlan } from "./week.js";
+function contextSignalsResult(signals) {
+    return signals.map((s) => ({
+        start: s.start.toISO(),
+        end: s.end.toISO(),
+        repo: s.repo,
+        branch: s.branch,
+        ticket: s.ticket,
+        text: s.text,
+        source: s.source,
+    }));
+}
 const WEEKDAY_ENUM = z.enum(["mon", "tue", "wed", "thu", "fri", "sat", "sun"]);
 const plannedEntrySchema = z.object({
     kind: z.enum(["ticket", "meeting", "unassigned"]),
@@ -46,6 +59,12 @@ const calendarEventSchema = z.object({
     start: z.string().describe("ISO 8601 datetime, any offset"),
     end: z.string().describe("ISO 8601 datetime, any offset"),
 });
+const contextNoteSchema = z.object({
+    text: z.string().describe("e.g. a Slack thread excerpt naming what was being worked on"),
+    start: z.string().describe("ISO 8601 datetime, any offset"),
+    end: z.string().describe("ISO 8601 datetime, any offset"),
+    source: z.enum(["session", "slack"]).optional(),
+});
 function resolveRange(config, input) {
     if (input.week)
         return resolveWeek(input.week, config.timezone);
@@ -80,14 +99,16 @@ server.registerTool("toggl_whoami", {
 });
 server.registerTool("git_activity", {
     title: "Git activity (debug, no network)",
-    description: "Show raw git reflog events and their resolved ticket/description per day for the given range. " +
-        "No Toggl or calendar calls - use this to sanity-check ticket attribution before running plan_week.",
+    description: "Show raw git reflog events and their resolved ticket/description per day for the given range, " +
+        "plus context signals resolved from local Claude Code session transcripts for the same range. " +
+        "No Toggl or calendar calls - use this to sanity-check attribution before running plan_week.",
     inputSchema: weekSelectionSchema,
 }, async (input) => {
     try {
         const config = loadConfig();
         const { weekStart, weekEnd } = resolveRange(config, input);
         const events = withTickets(readAllRepos(config.repos, weekStart, weekEnd, config.timezone, config.baseBranches), config.ticketPattern).sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
+        const contextSignals = readSessions(config.repos, weekStart, weekEnd, config.timezone, config.ticketPattern);
         return textResult({
             weekStart,
             weekEnd,
@@ -100,6 +121,7 @@ server.registerTool("git_activity", {
                 kind: e.kind,
                 description: e.description,
             })),
+            contextSignals: contextSignalsResult(contextSignals),
         });
     }
     catch (err) {
@@ -110,6 +132,9 @@ server.registerTool("plan_week", {
     title: "Plan a week's Toggl baseline",
     description: "Build a baseline time-entry proposal for a week from git activity and calendar events. Writes nothing to Toggl. " +
         "Calendar events must be supplied by the caller (e.g. from the Google Calendar MCP) for the calendars this user wants counted. " +
+        "Local Claude Code session transcripts are read automatically and, plus any caller-supplied contextNotes (e.g. Slack " +
+        "thread excerpts), are used to name entries where git signal is weak (a branch-slug fallback) or absent (unassigned) - " +
+        "never to override an entry that already has a real commit message. " +
         "Days that already have Toggl entries are skipped. Each commit ends its own entry, so a busy day can produce many " +
         "short entries rather than one. Pass the returned object straight to apply_week to write it.",
     // A flat object, not weekSelectionSchema.and(...): zod's intersection
@@ -122,6 +147,7 @@ server.registerTool("plan_week", {
         startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional().describe("YYYY-MM-DD, used with endDate instead of week"),
         endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
         calendarEvents: z.array(calendarEventSchema).default([]),
+        contextNotes: z.array(contextNoteSchema).default([]),
     })
         .refine((v) => v.week !== undefined || (v.startDate !== undefined && v.endDate !== undefined), {
         message: "provide either `week` or both `startDate` and `endDate`",
@@ -135,6 +161,10 @@ server.registerTool("plan_week", {
         const projectId = await client.findProjectId(me.default_workspace_id, config.projectName);
         const gitEvents = withTickets(readAllRepos(config.repos, weekStart, weekEnd, config.timezone, config.baseBranches), config.ticketPattern);
         const existingEntries = await client.listTimeEntries(weekStart, weekEnd);
+        const contextSignals = [
+            ...readSessions(config.repos, weekStart, weekEnd, config.timezone, config.ticketPattern),
+            ...signalsFromNotes(input.contextNotes, config.ticketPattern),
+        ];
         const weekPlan = buildWeekPlan({
             weekStart,
             weekEnd,
@@ -142,6 +172,7 @@ server.registerTool("plan_week", {
             gitEvents,
             calendarEvents: input.calendarEvents,
             existingEntries,
+            contextSignals,
         });
         return textResult({ workspaceId: me.default_workspace_id, projectId, weekPlan });
     }

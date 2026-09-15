@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import type { ContextSignal } from "./context.js";
 import { planDay, type TicketAttribution } from "./plan.js";
 import { eachDate } from "./time.js";
 import type { CalendarEventInput, Config, ExistingTimeEntry, GitEvent, WeekPlan } from "./types.js";
@@ -10,6 +11,7 @@ export interface BuildWeekPlanParams {
   gitEvents: (GitEvent & { ticket: string })[];
   calendarEvents: CalendarEventInput[];
   existingEntries: ExistingTimeEntry[];
+  contextSignals?: ContextSignal[];
 }
 
 function localDateOf(isoUtc: string, zone: string): string {
@@ -17,7 +19,7 @@ function localDateOf(isoUtc: string, zone: string): string {
 }
 
 export function buildWeekPlan(params: BuildWeekPlanParams): WeekPlan {
-  const { weekStart, weekEnd, config, gitEvents, calendarEvents, existingEntries } = params;
+  const { weekStart, weekEnd, config, gitEvents, calendarEvents, existingEntries, contextSignals } = params;
   const dates = eachDate(weekStart, weekEnd, config.timezone);
 
   let priorTicket: TicketAttribution | null = null;
@@ -30,6 +32,7 @@ export function buildWeekPlan(params: BuildWeekPlanParams): WeekPlan {
       calendarEvents,
       existingEntries: entriesForDate,
       priorTicket,
+      contextSignals,
     });
     priorTicket = carryTicket;
     return plan;

@@ -50,6 +50,21 @@ export interface CalendarEventInput {
   end: string;
 }
 
+/**
+ * A timestamped note as passed in by the caller (e.g. a Slack thread excerpt), used to
+ * enrich entry descriptions where git signal is weak or absent. Mirrors CalendarEventInput's
+ * "caller supplies it, the server has no integration of its own" shape - agent-transcript
+ * notes are instead read by the server itself, since they're local files, not a network call.
+ */
+export interface ContextNoteInput {
+  text: string;
+  /** ISO 8601, any offset */
+  start: string;
+  /** ISO 8601, any offset */
+  end: string;
+  source?: "session" | "slack";
+}
+
 /** A single git signal: something happened on this branch at this local time. */
 export interface GitEvent {
   timestamp: DateTime;

@@ -1,0 +1,4847 @@
+{
+  "context": {
+    "date_range": [
+      "2026-08-14T13:46:00.975000-03:00",
+      "2026-09-14T16:29:25.873000-03:00"
+    ],
+    "window": null,
+    "window_months": null,
+    "sources": [
+      "claude"
+    ],
+    "total_sessions": 53,
+    "total_prompts": 362,
+    "client_version": "0.4.0",
+    "observed_range": [
+      "2026-08-14T13:46:00.975000-03:00",
+      "2026-09-14T16:29:25.873000-03:00"
+    ]
+  },
+  "planning_ratio_explore_to_doing": 1.62,
+  "errors": {
+    "error_recovery_ratio": 0.936,
+    "error_rate_per_100_tools": 3.6
+  },
+  "iteration_depth": {
+    "mean": 2.16,
+    "median": 1,
+    "p90": 4,
+    "max": 20,
+    "files_over_15x": 2
+  },
+  "churn": {
+    "git_churn_total": 6030,
+    "tool_churn_edit_write": 21005,
+    "active_hours": 49.1,
+    "actions_per_prompt": 7.7
+  },
+  "orchestration": {
+    "fanout_median": 3,
+    "max_session_fanout": 14,
+    "parallel_dispatch_turns": 0,
+    "parallel_session_share": 0.724,
+    "delegating_sessions": 29,
+    "delegate_actions": 137,
+    "orchestratable_sessions": 24,
+    "delegated_orchestratable_sessions": 22
+  },
+  "compounding_writes": 58,
+  "ecosystem": {
+    "skills_distinct": 23,
+    "skills_total": 116,
+    "top_skills": [
+      {
+        "name": "review-diff",
+        "calls": 15
+      },
+      {
+        "name": "slim-pr-description",
+        "calls": 15
+      },
+      {
+        "name": "systematic-debugging",
+        "calls": 13
+      },
+      {
+        "name": "implement-feature",
+        "calls": 8
+      },
+      {
+        "name": "cerberus",
+        "calls": 8
+      },
+      {
+        "name": "share-extension-imports",
+        "calls": 8
+      },
+      {
+        "name": "capture-learning",
+        "calls": 6
+      },
+      {
+        "name": "verify-change",
+        "calls": 6
+      },
+      {
+        "name": "track-week",
+        "calls": 6
+      },
+      {
+        "name": "spike-plan",
+        "calls": 4
+      },
+      {
+        "name": "simulator-screenshot-verify",
+        "calls": 4
+      },
+      {
+        "name": "writing-plans",
+        "calls": 3
+      },
+      {
+        "name": "generate-qa-notes",
+        "calls": 3
+      },
+      {
+        "name": "retro",
+        "calls": 3
+      },
+      {
+        "name": "code-review",
+        "calls": 3
+      },
+      {
+        "name": "find-docs",
+        "calls": 2
+      },
+      {
+        "name": "figma-implement-design",
+        "calls": 2
+      },
+      {
+        "name": "brainstorm",
+        "calls": 2
+      },
+      {
+        "name": "sdd-tasks",
+        "calls": 1
+      },
+      {
+        "name": "difficult-bug",
+        "calls": 1
+      },
+      {
+        "name": "context7-mcp",
+        "calls": 1
+      },
+      {
+        "name": "jira-ticket-authoring",
+        "calls": 1
+      },
+      {
+        "name": "run-skill-generator",
+        "calls": 1
+      }
+    ],
+    "mcp_servers_distinct": 11,
+    "mcp_knowledge_calls": 26,
+    "mcp_knowledge_servers": 2,
+    "top_mcp_servers": [
+      {
+        "server": "context7",
+        "calls": 24
+      },
+      {
+        "server": "toggl",
+        "calls": 18
+      },
+      {
+        "server": "claude_ai_Atlassian",
+        "calls": 14
+      },
+      {
+        "server": "claude_ai_Google_Calendar",
+        "calls": 13
+      },
+      {
+        "server": "claude_ai_Figma",
+        "calls": 12
+      },
+      {
+        "server": "filesystem",
+        "calls": 9
+      },
+      {
+        "server": "claude_ai_Slack",
+        "calls": 4
+      },
+      {
+        "server": "time",
+        "calls": 4
+      },
+      {
+        "server": "git",
+        "calls": 4
+      },
+      {
+        "server": "codegraph",
+        "calls": 2
+      },
+      {
+        "server": "github",
+        "calls": 2
+      }
+    ]
+  },
+  "progression_monthly": [
+    {
+      "month": "2026-08",
+      "prompts": 184,
+      "tool_calls": 3750,
+      "sessions": 36,
+      "active_days": 11,
+      "tool_churn_lines": 14802,
+      "models": [
+        [
+          "claude-sonnet-5",
+          4240
+        ],
+        [
+          "claude-opus-5",
+          1376
+        ],
+        [
+          "claude-haiku-4-5-20251001",
+          1186
+        ]
+      ],
+      "top_model": "claude-sonnet-5",
+      "tokens_input": 40440,
+      "tokens_output": 5028018,
+      "tokens_cache_read": 621370519,
+      "tokens_cache_creation": 32113247,
+      "tokens_total": 658552224
+    },
+    {
+      "month": "2026-09",
+      "prompts": 178,
+      "tool_calls": 2679,
+      "sessions": 18,
+      "active_days": 10,
+      "tool_churn_lines": 6203,
+      "models": [
+        [
+          "claude-sonnet-5",
+          3355
+        ],
+        [
+          "claude-haiku-4-5-20251001",
+          1423
+        ],
+        [
+          "claude-opus-5",
+          333
+        ]
+      ],
+      "top_model": "claude-sonnet-5",
+      "tokens_input": 19103,
+      "tokens_output": 3903366,
+      "tokens_cache_read": 483368588,
+      "tokens_cache_creation": 32019422,
+      "tokens_total": 519310479
+    }
+  ],
+  "noticed_stats_monthly": [
+    {
+      "month": "2026-08",
+      "range_start": "2026-08-01",
+      "range_end": "2026-08-31",
+      "stats": {
+        "volume": {
+          "total_sessions": 36,
+          "total_prompts": 184,
+          "tool_calls_total": 3750,
+          "assistant_turns": 6816,
+          "thinking_blocks": 1980
+        },
+        "shipping": {
+          "git_churn_total": 20809,
+          "tool_churn_edit_write": 14802,
+          "shell_authored_lines_est": 1539,
+          "git_repos_seen": 4,
+          "git_repos_with_commits": 3,
+          "active_hours": 26.7
+        },
+        "iteration": {
+          "depth_mean": 2.09,
+          "depth_median": 1,
+          "depth_p90": 4,
+          "depth_max": 20,
+          "files_over_15x": 1
+        },
+        "errors": {
+          "tool_errors": 149,
+          "error_rate_per_100_tools": 4.0,
+          "error_recovery_ratio": 0.94
+        },
+        "models": {
+          "top_models": [
+            {
+              "model_id": "claude-sonnet-5",
+              "label": "Sonnet 5",
+              "turns": 4240,
+              "pct": 0.622
+            },
+            {
+              "model_id": "claude-opus-5",
+              "label": "Opus 5",
+              "turns": 1376,
+              "pct": 0.202
+            },
+            {
+              "model_id": "claude-haiku-4-5-20251001",
+              "label": "Haiku 4.5",
+              "turns": 1186,
+              "pct": 0.174
+            },
+            {
+              "model_id": "<synthetic>",
+              "label": "<synthetic>",
+              "turns": 14,
+              "pct": 0.002
+            }
+          ]
+        },
+        "rhythm": {
+          "peak_hours_local": [
+            11,
+            17,
+            12
+          ],
+          "weekday_histogram": {
+            "Mon": 5078,
+            "Tue": 1685,
+            "Wed": 1837,
+            "Thu": 2399,
+            "Fri": 3115,
+            "Sat": 0,
+            "Sun": 0
+          },
+          "preferred_days": [
+            "Mon",
+            "Fri",
+            "Thu"
+          ]
+        },
+        "prompts": {
+          "avg_length_chars": 903.8,
+          "median_length_chars": 74.0,
+          "polite_prompts": 22,
+          "questions_asked": 54
+        },
+        "agents": {
+          "delegate_actions": 80,
+          "background_tasks": 22,
+          "scheduled_actions": 2,
+          "fanout_median": 2
+        },
+        "sessions": {
+          "longest_run_minutes": 185.2
+        },
+        "tools": {
+          "top_tools": [
+            {
+              "name": "Bash",
+              "calls": 1740
+            },
+            {
+              "name": "Read",
+              "calls": 939
+            },
+            {
+              "name": "Edit",
+              "calls": 321
+            },
+            {
+              "name": "Grep",
+              "calls": 162
+            },
+            {
+              "name": "Write",
+              "calls": 124
+            },
+            {
+              "name": "Agent",
+              "calls": 80
+            },
+            {
+              "name": "ToolSearch",
+              "calls": 72
+            },
+            {
+              "name": "AskUserQuestion",
+              "calls": 54
+            },
+            {
+              "name": "Glob",
+              "calls": 43
+            },
+            {
+              "name": "WebFetch",
+              "calls": 42
+            },
+            {
+              "name": "WebSearch",
+              "calls": 32
+            },
+            {
+              "name": "Skill",
+              "calls": 20
+            },
+            {
+              "name": "ExitPlanMode",
+              "calls": 11
+            },
+            {
+              "name": "mcp__context7__query-docs",
+              "calls": 11
+            },
+            {
+              "name": "TaskOutput",
+              "calls": 11
+            },
+            {
+              "name": "TodoWrite",
+              "calls": 10
+            },
+            {
+              "name": "mcp__context7__resolve-library-id",
+              "calls": 9
+            },
+            {
+              "name": "ReportFindings",
+              "calls": 6
+            },
+            {
+              "name": "mcp__claude_ai_Google_Calendar__list_events",
+              "calls": 5
+            },
+            {
+              "name": "mcp__claude_ai_Figma__get_design_context",
+              "calls": 5
+            },
+            {
+              "name": "SendMessage",
+              "calls": 4
+            },
+            {
+              "name": "mcp__toggl__toggl_whoami",
+              "calls": 4
+            },
+            {
+              "name": "mcp__claude_ai_Atlassian__getJiraIssue",
+              "calls": 4
+            },
+            {
+              "name": "mcp__claude_ai_Figma__get_metadata",
+              "calls": 4
+            },
+            {
+              "name": "mcp__claude_ai_Slack__slack_search_public_and_private",
+              "calls": 3
+            },
+            {
+              "name": "EnterPlanMode",
+              "calls": 3
+            },
+            {
+              "name": "mcp__claude_ai_Google_Calendar__search_events",
+              "calls": 3
+            },
+            {
+              "name": "mcp__filesystem__read_text_file",
+              "calls": 3
+            },
+            {
+              "name": "mcp__claude_ai_Google_Calendar__list_calendars",
+              "calls": 2
+            },
+            {
+              "name": "mcp__toggl__plan_week",
+              "calls": 2
+            },
+            {
+              "name": "mcp__toggl__apply_week",
+              "calls": 2
+            },
+            {
+              "name": "mcp__filesystem__write_file",
+              "calls": 2
+            },
+            {
+              "name": "ScheduleWakeup",
+              "calls": 2
+            },
+            {
+              "name": "mcp__claude_ai_Figma__search_design_system",
+              "calls": 2
+            },
+            {
+              "name": "mcp__time__get_current_time",
+              "calls": 1
+            },
+            {
+              "name": "mcp__git__git_status",
+              "calls": 1
+            },
+            {
+              "name": "mcp__git__git_log",
+              "calls": 1
+            },
+            {
+              "name": "mcp__git__git_add",
+              "calls": 1
+            },
+            {
+              "name": "mcp__git__git_reset",
+              "calls": 1
+            },
+            {
+              "name": "mcp__filesystem__list_allowed_directories",
+              "calls": 1
+            },
+            {
+              "name": "mcp__filesystem__directory_tree",
+              "calls": 1
+            },
+            {
+              "name": "mcp__filesystem__get_file_info",
+              "calls": 1
+            },
+            {
+              "name": "mcp__filesystem__move_file",
+              "calls": 1
+            },
+            {
+              "name": "mcp__claude_ai_Figma__get_screenshot",
+              "calls": 1
+            },
+            {
+              "name": "mcp__claude_ai_Slack__slack_read_thread",
+              "calls": 1
+            },
+            {
+              "name": "mcp__github__get_me",
+              "calls": 1
+            },
+            {
+              "name": "mcp__github__create_repository",
+              "calls": 1
+            }
+          ]
+        },
+        "skills": {
+          "top_skills": [
+            {
+              "name": "review-diff",
+              "calls": 7
+            },
+            {
+              "name": "systematic-debugging",
+              "calls": 7
+            },
+            {
+              "name": "cerberus",
+              "calls": 6
+            },
+            {
+              "name": "verify-change",
+              "calls": 6
+            },
+            {
+              "name": "share-extension-imports",
+              "calls": 6
+            },
+            {
+              "name": "capture-learning",
+              "calls": 5
+            },
+            {
+              "name": "implement-feature",
+              "calls": 5
+            },
+            {
+              "name": "slim-pr-description",
+              "calls": 5
+            },
+            {
+              "name": "simulator-screenshot-verify",
+              "calls": 4
+            },
+            {
+              "name": "retro",
+              "calls": 3
+            },
+            {
+              "name": "track-week",
+              "calls": 3
+            },
+            {
+              "name": "spike-plan",
+              "calls": 2
+            },
+            {
+              "name": "writing-plans",
+              "calls": 2
+            },
+            {
+              "name": "generate-qa-notes",
+              "calls": 2
+            },
+            {
+              "name": "figma-implement-design",
+              "calls": 2
+            },
+            {
+              "name": "brainstorm",
+              "calls": 2
+            },
+            {
+              "name": "sdd-tasks",
+              "calls": 1
+            },
+            {
+              "name": "difficult-bug",
+              "calls": 1
+            },
+            {
+              "name": "context7-mcp",
+              "calls": 1
+            },
+            {
+              "name": "jira-ticket-authoring",
+              "calls": 1
+            },
+            {
+              "name": "find-docs",
+              "calls": 1
+            },
+            {
+              "name": "run-skill-generator",
+              "calls": 1
+            }
+          ]
+        },
+        "mcp_servers": {
+          "top_mcp_servers": [
+            {
+              "server": "context7",
+              "calls": 20
+            },
+            {
+              "server": "claude_ai_Figma",
+              "calls": 12
+            },
+            {
+              "server": "claude_ai_Google_Calendar",
+              "calls": 10
+            },
+            {
+              "server": "filesystem",
+              "calls": 9
+            },
+            {
+              "server": "toggl",
+              "calls": 8
+            },
+            {
+              "server": "claude_ai_Slack",
+              "calls": 4
+            },
+            {
+              "server": "git",
+              "calls": 4
+            },
+            {
+              "server": "claude_ai_Atlassian",
+              "calls": 4
+            },
+            {
+              "server": "github",
+              "calls": 2
+            },
+            {
+              "server": "time",
+              "calls": 1
+            }
+          ]
+        }
+      },
+      "token_usage": {
+        "total_input": 40440,
+        "total_output": 5028018,
+        "total_cache_read": 621370519,
+        "total_cache_creation": 32113247,
+        "by_model": [
+          {
+            "model_id": "claude-sonnet-5",
+            "model": "Sonnet 5",
+            "input": 8463,
+            "output": 3642560,
+            "cache_read": 490834372,
+            "cache_creation": 21804398
+          },
+          {
+            "model_id": "claude-opus-5",
+            "model": "Opus 5",
+            "input": 13147,
+            "output": 1083030,
+            "cache_read": 85640771,
+            "cache_creation": 6859248
+          },
+          {
+            "model_id": "claude-haiku-4-5-20251001",
+            "model": "Haiku 4.5",
+            "input": 18830,
+            "output": 302428,
+            "cache_read": 44895376,
+            "cache_creation": 3449601
+          },
+          {
+            "model_id": "<synthetic>",
+            "model": "<synthetic>",
+            "input": 0,
+            "output": 0,
+            "cache_read": 0,
+            "cache_creation": 0
+          }
+        ]
+      }
+    },
+    {
+      "month": "2026-09",
+      "range_start": "2026-09-01",
+      "range_end": "2026-09-30",
+      "stats": {
+        "volume": {
+          "total_sessions": 18,
+          "total_prompts": 178,
+          "tool_calls_total": 2679,
+          "assistant_turns": 5116,
+          "thinking_blocks": 1577
+        },
+        "shipping": {
+          "git_churn_total": 385,
+          "tool_churn_edit_write": 6203,
+          "shell_authored_lines_est": 380,
+          "git_repos_seen": 4,
+          "git_repos_with_commits": 2,
+          "active_hours": 22.2
+        },
+        "iteration": {
+          "depth_mean": 2.31,
+          "depth_median": 1.0,
+          "depth_p90": 6,
+          "depth_max": 17,
+          "files_over_15x": 1
+        },
+        "errors": {
+          "tool_errors": 84,
+          "error_rate_per_100_tools": 3.1,
+          "error_recovery_ratio": 0.929
+        },
+        "models": {
+          "top_models": [
+            {
+              "model_id": "claude-sonnet-5",
+              "label": "Sonnet 5",
+              "turns": 3355,
+              "pct": 0.656
+            },
+            {
+              "model_id": "claude-haiku-4-5-20251001",
+              "label": "Haiku 4.5",
+              "turns": 1423,
+              "pct": 0.278
+            },
+            {
+              "model_id": "claude-opus-5",
+              "label": "Opus 5",
+              "turns": 333,
+              "pct": 0.065
+            },
+            {
+              "model_id": "<synthetic>",
+              "label": "<synthetic>",
+              "turns": 5,
+              "pct": 0.001
+            }
+          ]
+        },
+        "rhythm": {
+          "peak_hours_local": [
+            11,
+            12,
+            16
+          ],
+          "weekday_histogram": {
+            "Mon": 2786,
+            "Tue": 2913,
+            "Wed": 2033,
+            "Thu": 2083,
+            "Fri": 1062,
+            "Sat": 0,
+            "Sun": 0
+          },
+          "preferred_days": [
+            "Tue",
+            "Mon",
+            "Thu"
+          ]
+        },
+        "prompts": {
+          "avg_length_chars": 1884.2,
+          "median_length_chars": 101.5,
+          "polite_prompts": 22,
+          "questions_asked": 22
+        },
+        "agents": {
+          "delegate_actions": 57,
+          "background_tasks": 34,
+          "scheduled_actions": 42,
+          "fanout_median": 3
+        },
+        "sessions": {
+          "longest_run_minutes": 121.4
+        },
+        "tools": {
+          "top_tools": [
+            {
+              "name": "Bash",
+              "calls": 1086
+            },
+            {
+              "name": "Read",
+              "calls": 762
+            },
+            {
+              "name": "Grep",
+              "calls": 235
+            },
+            {
+              "name": "Edit",
+              "calls": 201
+            },
+            {
+              "name": "Glob",
+              "calls": 95
+            },
+            {
+              "name": "Agent",
+              "calls": 57
+            },
+            {
+              "name": "ToolSearch",
+              "calls": 46
+            },
+            {
+              "name": "ScheduleWakeup",
+              "calls": 42
+            },
+            {
+              "name": "Write",
+              "calls": 35
+            },
+            {
+              "name": "AskUserQuestion",
+              "calls": 22
+            },
+            {
+              "name": "Skill",
+              "calls": 18
+            },
+            {
+              "name": "WebSearch",
+              "calls": 15
+            },
+            {
+              "name": "WebFetch",
+              "calls": 11
+            },
+            {
+              "name": "ExitPlanMode",
+              "calls": 8
+            },
+            {
+              "name": "mcp__claude_ai_Atlassian__getJiraIssue",
+              "calls": 7
+            },
+            {
+              "name": "TaskStop",
+              "calls": 4
+            },
+            {
+              "name": "ReportFindings",
+              "calls": 4
+            },
+            {
+              "name": "EnterPlanMode",
+              "calls": 3
+            },
+            {
+              "name": "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
+              "calls": 3
+            },
+            {
+              "name": "mcp__time__get_current_time",
+              "calls": 3
+            },
+            {
+              "name": "mcp__toggl__toggl_whoami",
+              "calls": 3
+            },
+            {
+              "name": "mcp__claude_ai_Google_Calendar__list_events",
+              "calls": 3
+            },
+            {
+              "name": "mcp__toggl__plan_week",
+              "calls": 3
+            },
+            {
+              "name": "mcp__toggl__apply_week",
+              "calls": 3
+            },
+            {
+              "name": "mcp__context7__query-docs",
+              "calls": 3
+            },
+            {
+              "name": "SendMessage",
+              "calls": 2
+            },
+            {
+              "name": "mcp__codegraph__codegraph_explore",
+              "calls": 2
+            },
+            {
+              "name": "mcp__toggl__git_activity",
+              "calls": 1
+            },
+            {
+              "name": "ListAgents",
+              "calls": 1
+            },
+            {
+              "name": "mcp__context7__resolve-library-id",
+              "calls": 1
+            }
+          ]
+        },
+        "skills": {
+          "top_skills": [
+            {
+              "name": "slim-pr-description",
+              "calls": 10
+            },
+            {
+              "name": "review-diff",
+              "calls": 8
+            },
+            {
+              "name": "systematic-debugging",
+              "calls": 6
+            },
+            {
+              "name": "code-review",
+              "calls": 3
+            },
+            {
+              "name": "implement-feature",
+              "calls": 3
+            },
+            {
+              "name": "track-week",
+              "calls": 3
+            },
+            {
+              "name": "share-extension-imports",
+              "calls": 2
+            },
+            {
+              "name": "cerberus",
+              "calls": 2
+            },
+            {
+              "name": "spike-plan",
+              "calls": 2
+            },
+            {
+              "name": "capture-learning",
+              "calls": 1
+            },
+            {
+              "name": "generate-qa-notes",
+              "calls": 1
+            },
+            {
+              "name": "find-docs",
+              "calls": 1
+            },
+            {
+              "name": "writing-plans",
+              "calls": 1
+            }
+          ]
+        },
+        "mcp_servers": {
+          "top_mcp_servers": [
+            {
+              "server": "claude_ai_Atlassian",
+              "calls": 10
+            },
+            {
+              "server": "toggl",
+              "calls": 10
+            },
+            {
+              "server": "context7",
+              "calls": 4
+            },
+            {
+              "server": "time",
+              "calls": 3
+            },
+            {
+              "server": "claude_ai_Google_Calendar",
+              "calls": 3
+            },
+            {
+              "server": "codegraph",
+              "calls": 2
+            }
+          ]
+        }
+      },
+      "token_usage": {
+        "total_input": 19103,
+        "total_output": 3903366,
+        "total_cache_read": 483368588,
+        "total_cache_creation": 32019422,
+        "by_model": [
+          {
+            "model_id": "claude-sonnet-5",
+            "model": "Sonnet 5",
+            "input": 6699,
+            "output": 3253887,
+            "cache_read": 411409509,
+            "cache_creation": 23940732
+          },
+          {
+            "model_id": "claude-haiku-4-5-20251001",
+            "model": "Haiku 4.5",
+            "input": 11738,
+            "output": 292337,
+            "cache_read": 47943689,
+            "cache_creation": 4088351
+          },
+          {
+            "model_id": "claude-opus-5",
+            "model": "Opus 5",
+            "input": 666,
+            "output": 357142,
+            "cache_read": 24015390,
+            "cache_creation": 3990339
+          },
+          {
+            "model_id": "<synthetic>",
+            "model": "<synthetic>",
+            "input": 0,
+            "output": 0,
+            "cache_read": 0,
+            "cache_creation": 0
+          }
+        ]
+      }
+    }
+  ],
+  "coverage": {
+    "2026-08": {
+      "flag": "complete",
+      "indexed_interactive_sessions": 1,
+      "available_transcripts": 36,
+      "interactive_coverage": 36.0,
+      "transcript_only_sessions": 35
+    },
+    "2026-09": {
+      "flag": "unknown",
+      "indexed_interactive_sessions": null,
+      "available_transcripts": 18,
+      "interactive_coverage": null,
+      "transcript_only_sessions": 18
+    }
+  },
+  "profile": {
+    "aq": {
+      "aq_0_100": 92,
+      "tier": "Elite",
+      "pillars": [
+        {
+          "name": "Breadth",
+          "weight": 30,
+          "score": 87.6,
+          "axes": [
+            {
+              "name": "Orchestration",
+              "base_weight": 33,
+              "weight": 33,
+              "normalized_score": 0.888,
+              "score": 29.3,
+              "signals": {
+                "subagent_types": 15,
+                "fanout_median": 3,
+                "o_harn": 1.0,
+                "frequency": 0.917,
+                "frequency_score": 1.0,
+                "frequency_confidence": 1.0,
+                "frequency_weight": 0.3,
+                "coordination_quality": 0.84,
+                "orchestratable_sessions": 24,
+                "delegated_orchestratable_sessions": 22
+              }
+            },
+            {
+              "name": "Skill fluency",
+              "base_weight": 22,
+              "weight": 22,
+              "normalized_score": 0.83,
+              "score": 18.3,
+              "signals": {
+                "skills_distinct": 23,
+                "tool_calls": 6429,
+                "skills_total": 116,
+                "skills_total_per_call": 0.018043,
+                "skills_total_per_call_target": 0.009,
+                "process_skills_matched": true
+              }
+            },
+            {
+              "name": "Tool command (MCP + CLI)",
+              "base_weight": 28,
+              "weight": 28,
+              "normalized_score": 0.829166666666667,
+              "score": 23.2,
+              "signals": {
+                "mcp_servers": 11,
+                "clis": 37,
+                "tool_calls": 6429,
+                "toolsearch_calls": 118
+              }
+            },
+            {
+              "name": "Discipline",
+              "base_weight": 17,
+              "weight": 17,
+              "normalized_score": 0.986666666666667,
+              "score": 16.8,
+              "signals": {
+                "tool_calls": 6429,
+                "task_tool_calls": 0,
+                "planning_practice_share": 0.3396,
+                "planning_practice_target": 0.3,
+                "planning_practice_eligible_sessions": 53
+              }
+            }
+          ]
+        },
+        {
+          "name": "Craft",
+          "weight": 35,
+          "score": 93.0,
+          "axes": [
+            {
+              "name": "Verification",
+              "base_weight": 35,
+              "weight": 35,
+              "normalized_score": 0.8,
+              "score": 28.0,
+              "signals": {
+                "tool_calls": 6429,
+                "shell_test_runs": 97,
+                "test_covered_change_sessions": 15,
+                "eligible_change_sessions": 25,
+                "test_coverage": 0.6,
+                "review_skills": 36,
+                "review_skills_per_call": 0.0056,
+                "review_skills_per_call_target": 0.004
+              }
+            },
+            {
+              "name": "Grounding",
+              "base_weight": 25,
+              "weight": 25,
+              "normalized_score": 1.0,
+              "score": 25.0,
+              "signals": {
+                "planning_ratio": 1.62
+              }
+            },
+            {
+              "name": "Context Intelligence",
+              "base_weight": 20,
+              "weight": 20,
+              "normalized_score": 1.0,
+              "score": 20.0,
+              "signals": {
+                "grounded_sessions": 25,
+                "write_sessions": 25,
+                "total_sessions": 53,
+                "coverage": 1.0,
+                "target_coverage": 0.6,
+                "grounded_session_rule": "knowledge-MCP call OR explore-class project/data/design MCP call before a later Edit/Write/MultiEdit/NotebookEdit in the same session",
+                "score_formula": "coverage = evidence_eligible_sessions / eligible_change_sessions; score = min(1, coverage / 0.60)"
+              }
+            },
+            {
+              "name": "Compounding",
+              "base_weight": 20,
+              "weight": 20,
+              "normalized_score": 1.0,
+              "score": 20.0,
+              "signals": {
+                "tool_calls": 6429,
+                "compounding_writes": 58,
+                "compounding_writes_per_call": 0.009022,
+                "compounding_writes_per_call_target": 0.0018,
+                "compounding_skills_matched": true
+              }
+            }
+          ]
+        },
+        {
+          "name": "Efficiency",
+          "weight": 20,
+          "score": 89.4,
+          "axes": [
+            {
+              "name": "Recovery",
+              "base_weight": 50,
+              "weight": 100,
+              "normalized_score": 0.894270088660756,
+              "score": 89.4,
+              "signals": {
+                "recovery_ratio": 0.936,
+                "api_retries": 44,
+                "api_per_100_tools": 0.684
+              }
+            }
+          ],
+          "not_applicable": [
+            "Steering leverage"
+          ]
+        },
+        {
+          "name": "Savvy",
+          "weight": 15,
+          "score": 100.0,
+          "axes": [
+            {
+              "name": "Model mix",
+              "base_weight": 50,
+              "weight": 50,
+              "normalized_score": 1.0,
+              "score": 50.0,
+              "signals": {
+                "distinct_models": 4,
+                "offload_share": 0.36,
+                "routing": {
+                  "state": "unmeasured",
+                  "score": null,
+                  "successful_lower_tier_pairs": 0,
+                  "eligible_completed_substantive_pairs": 0,
+                  "excluded_reasons": {}
+                }
+              },
+              "partial_terms": {
+                "scored": 2,
+                "total": 3,
+                "weight_scored": 0.7
+              }
+            },
+            {
+              "name": "Token economy",
+              "base_weight": 50,
+              "weight": 50,
+              "normalized_score": 1.0,
+              "score": 50.0,
+              "signals": {
+                "tool_calls": 6429,
+                "cli_share": 0.97
+              }
+            }
+          ]
+        }
+      ],
+      "score_contract_id": "19:19:19",
+      "steering_leverage": {
+        "state": "withheld_unvalidated_band",
+        "actions_per_prompt": 7.7
+      },
+      "mcp_vs_cli": {
+        "cli_calls": 3879,
+        "cli_distinct": 37,
+        "mcp_calls": 106,
+        "mcp_distinct": 11,
+        "ratio": 36.6
+      },
+      "tool_diversity": {
+        "distinct": 52,
+        "entropy": 0.455
+      }
+    },
+    "archetype": {
+      "title": "Elite",
+      "quote": "You operate at the top \u2014 broad machinery, well used. Your thinnest axis is breadth \u2014 that's where the next gain is."
+    },
+    "scores": {
+      "execution": {
+        "value": 6.6,
+        "gloss": "How much you ship, at AI leverage",
+        "drag_note": "Tool output rate is dragging this down \u2014 4.3e+02 tool-authored lines/hr, target ~1e+03.",
+        "subs": [
+          {
+            "label": "Tool output rate",
+            "your_value": 427.8004073319755,
+            "target": 1000,
+            "unit": "tool-authored lines/hr",
+            "weight": 0.6,
+            "pct": 0.4278004073319755,
+            "direction": "higher",
+            "is_drag": true,
+            "verdict": "weak",
+            "score_pct": 43,
+            "display_value": "428 tool-authored lines/hr",
+            "display_target": "1,000 tool-authored lines/hr",
+            "narrative": "Tool output rate is weak (428 tool-authored lines/hr, target 1,000 tool-authored lines/hr \u2014 below target, scoring 43%)."
+          },
+          {
+            "label": "Delegation & parallelism",
+            "your_value": 0.5331491712707183,
+            "target": 0.3,
+            "unit": "agent-runs/prompt",
+            "weight": 0.4,
+            "pct": 1.0,
+            "direction": "higher",
+            "is_drag": false,
+            "verdict": "excellent",
+            "score_pct": 100,
+            "display_value": "0.53 agent-runs/prompt",
+            "display_target": "0.3 agent-runs/prompt",
+            "narrative": "Delegation & parallelism is excellent (0.53 agent-runs/prompt, target 0.3 agent-runs/prompt \u2014 well above target, scoring 100%)."
+          }
+        ],
+        "axis_verdict": "good",
+        "score_out_of_10": "6.6 / 10",
+        "drag_narrative": "Tool output rate is the weakest contributor, scoring 43%. Your value: 428 tool-authored lines/hr (target: 1,000 tool-authored lines/hr, higher is better).",
+        "axis_narrative": "Execution scores 6.6/10 (good). Strongest: Delegation & parallelism (100%); weakest: Tool output rate (43%)."
+      },
+      "planning": {
+        "value": 9.9,
+        "gloss": "Think before you build",
+        "drag_note": "Ordered planning readiness is dragging this down \u2014 0.48 eligible-session coverage, target ~0.5.",
+        "subs": [
+          {
+            "label": "Explore-before-build",
+            "your_value": 1.62,
+            "target": 0.65,
+            "unit": "explore/doing ratio",
+            "weight": 0.3,
+            "pct": 1.0,
+            "direction": "higher",
+            "is_drag": false,
+            "verdict": "excellent",
+            "score_pct": 100,
+            "display_value": "1.6 explore/doing ratio",
+            "display_target": "0.65 explore/doing ratio",
+            "narrative": "Explore-before-build is excellent (1.6 explore/doing ratio, target 0.65 explore/doing ratio \u2014 well above target, scoring 100%)."
+          },
+          {
+            "label": "Reasoning depth",
+            "your_value": 67.11320754716981,
+            "target": 12.0,
+            "unit": "thinking blocks/session",
+            "weight": 0.3,
+            "pct": 1.0,
+            "direction": "higher",
+            "is_drag": false,
+            "verdict": "excellent",
+            "score_pct": 100,
+            "display_value": "67 thinking blocks/session",
+            "display_target": "12 thinking blocks/session",
+            "narrative": "Reasoning depth is excellent (67 thinking blocks/session, target 12 thinking blocks/session \u2014 well above target, scoring 100%)."
+          },
+          {
+            "label": "Planning practice",
+            "your_value": 0.33962264150943394,
+            "target": 0.3,
+            "unit": "planning sessions/session",
+            "weight": 0.25,
+            "pct": 1.0,
+            "direction": "higher",
+            "is_drag": false,
+            "scope_state": "measured",
+            "planning_skill_sessions": 18,
+            "planning_skill_eligible_sessions": 53,
+            "planning_skill_unmeasured_sessions": 0,
+            "planning_skill_session_share": 0.33962264150943394,
+            "planning_skill_session_coverage": 1.0,
+            "coverage": 1.0,
+            "base_weight": 0.25,
+            "effective_weight": 0.25,
+            "verdict": "excellent",
+            "score_pct": 100,
+            "display_value": "0.34 planning sessions/session",
+            "display_target": "0.3 planning sessions/session",
+            "narrative": "Planning practice is excellent (0.34 planning sessions/session, target 0.3 planning sessions/session \u2014 well above target, scoring 100%)."
+          },
+          {
+            "label": "Ordered planning readiness",
+            "your_value": 0.48,
+            "target": 0.5,
+            "unit": "eligible-session coverage",
+            "weight": 0.15,
+            "pct": 0.96,
+            "direction": "higher",
+            "is_drag": true,
+            "verdict": "excellent",
+            "score_pct": 96,
+            "display_value": "0.48 eligible-session coverage",
+            "display_target": "0.5 eligible-session coverage",
+            "narrative": "Ordered planning readiness is excellent (0.48 eligible-session coverage, target 0.5 eligible-session coverage \u2014 well above target, scoring 96%)."
+          }
+        ],
+        "axis_verdict": "excellent",
+        "score_out_of_10": "9.9 / 10",
+        "drag_narrative": "Ordered planning readiness is the weakest contributor, scoring 96%. Your value: 0.48 eligible-session coverage (target: 0.5 eligible-session coverage, higher is better).",
+        "axis_narrative": "Planning scores 9.9/10 (excellent). Strongest: Explore-before-build (100%); weakest: Ordered planning readiness (96%)."
+      },
+      "engineering": {
+        "value": 8.7,
+        "gloss": "Craft and low rework",
+        "drag_note": "Low errors is dragging this down \u2014 3.6 errors/100 tools (target \u226410).",
+        "subs": [
+          {
+            "label": "Low rework",
+            "your_value": 2.16,
+            "target": 2.0,
+            "unit": "mean file-edit depth",
+            "weight": 0.3,
+            "pct": 0.98,
+            "direction": "lower",
+            "is_drag": false,
+            "verdict": "excellent",
+            "score_pct": 98,
+            "display_value": "2.2 mean file-edit depth",
+            "display_target": "\u2264 2 mean file-edit depth",
+            "narrative": "Low rework is excellent (2.2 mean file-edit depth, target \u2264 2 mean file-edit depth \u2014 well within target, scoring 98%)."
+          },
+          {
+            "label": "Clean iteration",
+            "your_value": 4,
+            "target": 3.0,
+            "unit": "p90 file-edit depth",
+            "weight": 0.25,
+            "pct": 0.8888888888888888,
+            "direction": "lower",
+            "is_drag": false,
+            "verdict": "good",
+            "score_pct": 89,
+            "display_value": "4 p90 file-edit depth",
+            "display_target": "\u2264 3 p90 file-edit depth",
+            "narrative": "Clean iteration is good (4 p90 file-edit depth, target \u2264 3 p90 file-edit depth \u2014 near target threshold, scoring 89%)."
+          },
+          {
+            "label": "Focus",
+            "your_value": 0.03773584905660377,
+            "target": 0.25,
+            "unit": "hammered-files/session",
+            "weight": 0.2,
+            "pct": 0.8490566037735849,
+            "direction": "lower",
+            "is_drag": false,
+            "verdict": "good",
+            "score_pct": 85,
+            "display_value": "0.038 hammered-files/session",
+            "display_target": "\u2264 0.25 hammered-files/session",
+            "narrative": "Focus is good (0.038 hammered-files/session, target \u2264 0.25 hammered-files/session \u2014 near target threshold, scoring 85%)."
+          },
+          {
+            "label": "Quality ceremony",
+            "your_value": 2.358490566037736,
+            "target": 3.0,
+            "unit": "quality-skills/session",
+            "weight": 0.15,
+            "pct": 0.7861635220125787,
+            "direction": "higher",
+            "is_drag": false,
+            "verdict": "good",
+            "score_pct": 79,
+            "display_value": "2.4 quality-skills/session",
+            "display_target": "3 quality-skills/session",
+            "narrative": "Quality ceremony is good (2.4 quality-skills/session, target 3 quality-skills/session \u2014 approaching target, scoring 79%)."
+          },
+          {
+            "label": "Low errors",
+            "your_value": 3.6,
+            "target": 10.0,
+            "unit": "errors/100 tools",
+            "weight": 0.1,
+            "pct": 0.64,
+            "direction": "lower",
+            "is_drag": true,
+            "verdict": "adequate",
+            "score_pct": 64,
+            "display_value": "3.6 errors/100 tools",
+            "display_target": "\u2264 10 errors/100 tools",
+            "narrative": "Low errors is adequate (3.6 errors/100 tools, target \u2264 10 errors/100 tools \u2014 near target threshold, scoring 64%)."
+          }
+        ],
+        "axis_verdict": "excellent",
+        "score_out_of_10": "8.7 / 10",
+        "drag_narrative": "Low errors is the weakest contributor, scoring 64%. Your value: 3.6 errors/100 tools (target: \u2264 10 errors/100 tools, lower is better).",
+        "axis_narrative": "Engineering scores 8.7/10 (excellent). Strongest: Low rework (98%); weakest: Low errors (64%)."
+      }
+    },
+    "steering": {
+      "label": "Medium leash",
+      "gloss": "autonomous stretches, hands-on steering",
+      "detail": "~8 actions per turn before you weigh in \u00b7 the agent checked in on 17% of your prompts"
+    },
+    "growth_edges": [
+      {
+        "eyebrow": "Go deeper",
+        "title": "You're balanced \u2014 your edge is depth",
+        "advice": "You're even across the build sprint, so the next gear isn't a weak spot to patch \u2014 it's depth. Add a short retro after each session and let the learnings compound session over session. (gstack names this /retro \u2014 the Reflect stage.)",
+        "commands": [
+          "/retro"
+        ],
+        "axis": null,
+        "severity": "low"
+      }
+    ],
+    "signature_moves": [
+      {
+        "tag": "Think",
+        "title": "You think before you touch the diff",
+        "evidence": "3,557 reasoning blocks (~67/session) before edits land \u2014 you deliberate hard, then commit."
+      },
+      {
+        "tag": "Build",
+        "title": "You run a team, not a tool",
+        "evidence": "193 delegated & backgrounded agent runs with the shell as your top tool. You parallelize and grind rather than babysit one chat."
+      }
+    ],
+    "model_usage": [
+      {
+        "model_id": "claude-sonnet-5",
+        "model": "Sonnet 5",
+        "count": 7595,
+        "pct": 0.637,
+        "tokens_input": 15162,
+        "tokens_output": 6896447,
+        "tokens_cache_read": 902243881,
+        "tokens_cache_creation": 45745130
+      },
+      {
+        "model_id": "claude-haiku-4-5-20251001",
+        "model": "Haiku 4.5",
+        "count": 2609,
+        "pct": 0.219,
+        "tokens_input": 30568,
+        "tokens_output": 594765,
+        "tokens_cache_read": 92839065,
+        "tokens_cache_creation": 7537952
+      },
+      {
+        "model_id": "claude-opus-5",
+        "model": "Opus 5",
+        "count": 1709,
+        "pct": 0.143,
+        "tokens_input": 13813,
+        "tokens_output": 1440172,
+        "tokens_cache_read": 109656161,
+        "tokens_cache_creation": 10849587
+      },
+      {
+        "model_id": "<synthetic>",
+        "model": "<synthetic>",
+        "count": 19,
+        "pct": 0.002,
+        "tokens_input": 0,
+        "tokens_output": 0,
+        "tokens_cache_read": 0,
+        "tokens_cache_creation": 0
+      }
+    ]
+  },
+  "scoring_inputs_version": 19,
+  "aq_version": 19,
+  "gstack_version": 19,
+  "score_contract_id": "19:19:19",
+  "comparison_policy": "same_score_contract_id_only",
+  "scoring_inputs_by_source": {
+    "claude": {
+      "window": {
+        "scoring_inputs_version": 19,
+        "aq_version": 19,
+        "gstack_version": 19,
+        "score_contract_id": "19:19:19",
+        "source": "claude",
+        "volume": {
+          "total_sessions": 53,
+          "total_prompts": 362,
+          "total_instructions": 450,
+          "tool_calls_total": 6429,
+          "sidechain_tool_calls": 2976,
+          "thinking_blocks": 3557
+        },
+        "velocity": {
+          "active_hours": 49.1,
+          "tool_churn_edit_write": 21005,
+          "shell_authored_lines_est": 1919
+        },
+        "behavior": {
+          "planning_ratio_explore_to_doing": 1.62,
+          "actions_per_prompt": 7.7,
+          "questions_asked": 76,
+          "error_recovery_ratio": 0.936,
+          "error_rate_per_100_tools": 3.6,
+          "api_errors_retries": 44,
+          "fanout_median": 3,
+          "max_session_fanout": 14,
+          "parallel_dispatch_turns": 0,
+          "delegating_sessions": 29,
+          "parallel_session_share": 0.724,
+          "shell_test_runs": 97,
+          "plan_sessions": 18,
+          "planning_skill_sessions": 18,
+          "eligible_change_sessions": 25,
+          "test_covered_change_sessions": 15,
+          "planned_eligible_sessions": 12,
+          "evidence_eligible_sessions": 25,
+          "ordered_facts_state": "measured",
+          "sidechain_label_state": "measured",
+          "linked_model_pairs": [
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 5,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 30,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 38,
+              "writes": 16
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 38,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 4,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 31,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 37,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 22,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 35,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 23,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 25,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 27,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 56,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 33,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 5,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 6,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 40,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 43,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 33,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 24,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 27,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 41,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 20,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 51,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 20,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 19,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 26,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 26,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 8,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 23,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 46,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 22,
+              "writes": 5
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-haiku-4-5-20251001",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 70,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 19,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 9,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 8,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 17,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 21,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 15,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 15,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 13,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 56,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 72,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 76,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 1,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 60,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 26,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 24,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 24,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 15,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 18,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 39,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 24,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 41,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 25,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 3,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 63,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 19,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 35,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 14,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 23,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 10,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 40,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 53,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 41,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 21,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 8,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 28,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": false,
+              "substantive_calls": 0,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 17,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 41,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 13,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 6,
+              "writes": 1
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 1,
+              "writes": 1
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 12,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 13,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 12,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-opus-5",
+              "child_model": "claude-opus-5[1m]",
+              "completed": true,
+              "substantive_calls": 11,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-haiku-4-5-20251001",
+              "completed": true,
+              "substantive_calls": 39,
+              "writes": 0
+            },
+            {
+              "provider": "anthropic",
+              "lead_model": "claude-sonnet-5",
+              "child_model": "claude-sonnet-5",
+              "completed": true,
+              "substantive_calls": 22,
+              "writes": 0
+            }
+          ],
+          "linked_model_routing_state": "unmeasured",
+          "delegate_actions": 137,
+          "background_tasks": 56,
+          "iteration_depth_mean": 2.16,
+          "iteration_depth_p90": 4,
+          "iteration_depth_max": 20,
+          "files_hammered_over_15x": 2,
+          "no_tool_activity": false,
+          "orchestratable_sessions": 24,
+          "delegated_orchestratable_sessions": 22,
+          "planning_skill_eligible_sessions": 53,
+          "planning_skill_unmeasured_sessions": 0,
+          "planning_skill_session_scope_state": "measured",
+          "planning_skill_session_share": 0.339623,
+          "planning_skill_session_coverage": 1.0
+        },
+        "stack": {
+          "skills_distinct": 23,
+          "skills_total": 116,
+          "compounding_writes": 58,
+          "subagent_types_distinct": 15,
+          "max_session_subagent_types": 7,
+          "subagent_types": [
+            [
+              "explore-codebase",
+              34
+            ],
+            [
+              "general-purpose",
+              22
+            ],
+            [
+              "Explore",
+              18
+            ],
+            [
+              "code-reviewer",
+              16
+            ],
+            [
+              "simulator-driver",
+              9
+            ],
+            [
+              "Plan",
+              7
+            ],
+            [
+              "design-system-reviewer",
+              5
+            ],
+            [
+              "jira-scribe",
+              5
+            ],
+            [
+              "docs-researcher",
+              5
+            ],
+            [
+              "claude",
+              5
+            ]
+          ],
+          "top_skills": [
+            [
+              "review-diff",
+              15
+            ],
+            [
+              "slim-pr-description",
+              15
+            ],
+            [
+              "systematic-debugging",
+              13
+            ],
+            [
+              "implement-feature",
+              8
+            ],
+            [
+              "cerberus",
+              8
+            ],
+            [
+              "share-extension-imports",
+              8
+            ],
+            [
+              "capture-learning",
+              6
+            ],
+            [
+              "verify-change",
+              6
+            ],
+            [
+              "track-week",
+              6
+            ],
+            [
+              "spike-plan",
+              4
+            ],
+            [
+              "simulator-screenshot-verify",
+              4
+            ],
+            [
+              "writing-plans",
+              3
+            ],
+            [
+              "generate-qa-notes",
+              3
+            ],
+            [
+              "retro",
+              3
+            ],
+            [
+              "code-review",
+              3
+            ],
+            [
+              "find-docs",
+              2
+            ],
+            [
+              "figma-implement-design",
+              2
+            ],
+            [
+              "brainstorm",
+              2
+            ],
+            [
+              "sdd-tasks",
+              1
+            ],
+            [
+              "difficult-bug",
+              1
+            ],
+            [
+              "context7-mcp",
+              1
+            ],
+            [
+              "jira-ticket-authoring",
+              1
+            ],
+            [
+              "run-skill-generator",
+              1
+            ]
+          ],
+          "skills_all": [
+            [
+              "review-diff",
+              15
+            ],
+            [
+              "slim-pr-description",
+              15
+            ],
+            [
+              "systematic-debugging",
+              13
+            ],
+            [
+              "implement-feature",
+              8
+            ],
+            [
+              "cerberus",
+              8
+            ],
+            [
+              "share-extension-imports",
+              8
+            ],
+            [
+              "capture-learning",
+              6
+            ],
+            [
+              "verify-change",
+              6
+            ],
+            [
+              "track-week",
+              6
+            ],
+            [
+              "spike-plan",
+              4
+            ],
+            [
+              "simulator-screenshot-verify",
+              4
+            ],
+            [
+              "writing-plans",
+              3
+            ],
+            [
+              "generate-qa-notes",
+              3
+            ],
+            [
+              "retro",
+              3
+            ],
+            [
+              "code-review",
+              3
+            ],
+            [
+              "find-docs",
+              2
+            ],
+            [
+              "figma-implement-design",
+              2
+            ],
+            [
+              "brainstorm",
+              2
+            ],
+            [
+              "sdd-tasks",
+              1
+            ],
+            [
+              "difficult-bug",
+              1
+            ],
+            [
+              "context7-mcp",
+              1
+            ],
+            [
+              "jira-ticket-authoring",
+              1
+            ],
+            [
+              "run-skill-generator",
+              1
+            ]
+          ],
+          "models": [
+            [
+              "claude-sonnet-5",
+              7595
+            ],
+            [
+              "claude-haiku-4-5-20251001",
+              2609
+            ],
+            [
+              "claude-opus-5",
+              1709
+            ],
+            [
+              "<synthetic>",
+              19
+            ]
+          ]
+        },
+        "tools": {
+          "agent_calls": 137,
+          "mcp_servers_distinct": 11,
+          "clis_distinct": 37,
+          "toolsearch_calls": 118,
+          "task_tool_calls": 0,
+          "cli_calls": 3879,
+          "mcp_calls": 106,
+          "tool_diversity": 52,
+          "tool_entropy_normalized": 0.455,
+          "mcp_knowledge_calls": 26,
+          "mcp_knowledge_servers": 2,
+          "mcp_knowledge_server_names": [
+            "codegraph",
+            "context7"
+          ],
+          "mcp_grounded_sessions": 22,
+          "mcp_write_sessions": 32,
+          "mcp_subcategory_breakdown": {
+            "communication": {
+              "calls": 17,
+              "servers": 2
+            },
+            "data": {
+              "calls": 18,
+              "servers": 1
+            },
+            "design": {
+              "calls": 12,
+              "servers": 1
+            },
+            "infra": {
+              "calls": 1,
+              "servers": 1
+            },
+            "knowledge": {
+              "calls": 26,
+              "servers": 2
+            },
+            "other": {
+              "calls": 16,
+              "servers": 3
+            },
+            "project": {
+              "calls": 16,
+              "servers": 2
+            }
+          },
+          "top_tools": [
+            [
+              "Bash",
+              2826
+            ],
+            [
+              "Read",
+              1701
+            ],
+            [
+              "Edit",
+              522
+            ],
+            [
+              "Grep",
+              397
+            ],
+            [
+              "Write",
+              159
+            ],
+            [
+              "Glob",
+              138
+            ],
+            [
+              "Agent",
+              137
+            ],
+            [
+              "ToolSearch",
+              118
+            ],
+            [
+              "AskUserQuestion",
+              76
+            ],
+            [
+              "WebFetch",
+              53
+            ],
+            [
+              "WebSearch",
+              47
+            ],
+            [
+              "ScheduleWakeup",
+              44
+            ],
+            [
+              "Skill",
+              38
+            ],
+            [
+              "ExitPlanMode",
+              19
+            ],
+            [
+              "mcp__context7__query-docs",
+              14
+            ],
+            [
+              "mcp__claude_ai_Atlassian__getJiraIssue",
+              11
+            ],
+            [
+              "TaskOutput",
+              11
+            ],
+            [
+              "TodoWrite",
+              10
+            ],
+            [
+              "mcp__context7__resolve-library-id",
+              10
+            ],
+            [
+              "ReportFindings",
+              10
+            ],
+            [
+              "mcp__claude_ai_Google_Calendar__list_events",
+              8
+            ],
+            [
+              "mcp__toggl__toggl_whoami",
+              7
+            ],
+            [
+              "SendMessage",
+              6
+            ],
+            [
+              "EnterPlanMode",
+              6
+            ],
+            [
+              "mcp__toggl__plan_week",
+              5
+            ],
+            [
+              "mcp__toggl__apply_week",
+              5
+            ],
+            [
+              "mcp__claude_ai_Figma__get_design_context",
+              5
+            ],
+            [
+              "TaskStop",
+              4
+            ],
+            [
+              "mcp__time__get_current_time",
+              4
+            ],
+            [
+              "mcp__claude_ai_Figma__get_metadata",
+              4
+            ],
+            [
+              "mcp__claude_ai_Slack__slack_search_public_and_private",
+              3
+            ],
+            [
+              "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
+              3
+            ],
+            [
+              "mcp__claude_ai_Google_Calendar__search_events",
+              3
+            ],
+            [
+              "mcp__filesystem__read_text_file",
+              3
+            ],
+            [
+              "mcp__codegraph__codegraph_explore",
+              2
+            ],
+            [
+              "mcp__claude_ai_Google_Calendar__list_calendars",
+              2
+            ],
+            [
+              "mcp__filesystem__write_file",
+              2
+            ],
+            [
+              "mcp__claude_ai_Figma__search_design_system",
+              2
+            ],
+            [
+              "mcp__git__git_status",
+              1
+            ],
+            [
+              "mcp__git__git_log",
+              1
+            ],
+            [
+              "mcp__git__git_add",
+              1
+            ],
+            [
+              "mcp__git__git_reset",
+              1
+            ],
+            [
+              "mcp__toggl__git_activity",
+              1
+            ],
+            [
+              "mcp__filesystem__list_allowed_directories",
+              1
+            ],
+            [
+              "mcp__filesystem__directory_tree",
+              1
+            ],
+            [
+              "mcp__filesystem__get_file_info",
+              1
+            ],
+            [
+              "mcp__filesystem__move_file",
+              1
+            ],
+            [
+              "mcp__claude_ai_Figma__get_screenshot",
+              1
+            ],
+            [
+              "mcp__claude_ai_Slack__slack_read_thread",
+              1
+            ],
+            [
+              "ListAgents",
+              1
+            ],
+            [
+              "mcp__github__get_me",
+              1
+            ],
+            [
+              "mcp__github__create_repository",
+              1
+            ]
+          ]
+        },
+        "token_usage": {
+          "total_input": 59543,
+          "total_output": 8931384,
+          "total_cache_read": 1104739107,
+          "total_cache_creation": 64132669,
+          "by_model": [
+            {
+              "model_id": "claude-sonnet-5",
+              "model": "Sonnet 5",
+              "input": 15162,
+              "output": 6896447,
+              "cache_read": 902243881,
+              "cache_creation": 45745130
+            },
+            {
+              "model_id": "claude-opus-5",
+              "model": "Opus 5",
+              "input": 13813,
+              "output": 1440172,
+              "cache_read": 109656161,
+              "cache_creation": 10849587
+            },
+            {
+              "model_id": "claude-haiku-4-5-20251001",
+              "model": "Haiku 4.5",
+              "input": 30568,
+              "output": 594765,
+              "cache_read": 92839065,
+              "cache_creation": 7537952
+            },
+            {
+              "model_id": "<synthetic>",
+              "model": "<synthetic>",
+              "input": 0,
+              "output": 0,
+              "cache_read": 0,
+              "cache_creation": 0
+            }
+          ]
+        }
+      },
+      "monthly": [
+        {
+          "scoring_inputs_version": 19,
+          "aq_version": 19,
+          "gstack_version": 19,
+          "score_contract_id": "19:19:19",
+          "source": "claude",
+          "volume": {
+            "total_sessions": 36,
+            "total_prompts": 184,
+            "total_instructions": 244,
+            "tool_calls_total": 3750,
+            "sidechain_tool_calls": 1725,
+            "thinking_blocks": 1980
+          },
+          "velocity": {
+            "active_hours": 26.7,
+            "tool_churn_edit_write": 14802,
+            "shell_authored_lines_est": 1539
+          },
+          "behavior": {
+            "planning_ratio_explore_to_doing": 1.44,
+            "actions_per_prompt": 8.3,
+            "questions_asked": 54,
+            "error_recovery_ratio": 0.94,
+            "error_rate_per_100_tools": 4.0,
+            "api_errors_retries": 39,
+            "fanout_median": 2,
+            "max_session_fanout": 14,
+            "parallel_dispatch_turns": null,
+            "delegating_sessions": 17,
+            "parallel_session_share": 0.706,
+            "shell_test_runs": 53,
+            "plan_sessions": 13,
+            "planning_skill_sessions": 13,
+            "eligible_change_sessions": 15,
+            "test_covered_change_sessions": 5,
+            "planned_eligible_sessions": 8,
+            "evidence_eligible_sessions": 15,
+            "ordered_facts_state": "measured",
+            "sidechain_label_state": "measured",
+            "linked_model_pairs": [],
+            "linked_model_routing_state": "unsupported",
+            "delegate_actions": 80,
+            "background_tasks": 22,
+            "iteration_depth_mean": 2.09,
+            "iteration_depth_p90": 4,
+            "iteration_depth_max": 20,
+            "files_hammered_over_15x": 1,
+            "no_tool_activity": false,
+            "orchestratable_sessions": 15,
+            "delegated_orchestratable_sessions": 13,
+            "planning_skill_eligible_sessions": 36,
+            "planning_skill_unmeasured_sessions": 0,
+            "planning_skill_session_scope_state": "measured",
+            "planning_skill_session_share": 0.361111,
+            "planning_skill_session_coverage": 1.0
+          },
+          "stack": {
+            "skills_distinct": 22,
+            "skills_total": 73,
+            "compounding_writes": 50,
+            "subagent_types_distinct": 15,
+            "max_session_subagent_types": 7,
+            "subagent_types": [
+              [
+                "Explore",
+                14
+              ],
+              [
+                "explore-codebase",
+                12
+              ],
+              [
+                "general-purpose",
+                11
+              ],
+              [
+                "code-reviewer",
+                10
+              ],
+              [
+                "Plan",
+                5
+              ],
+              [
+                "claude",
+                5
+              ],
+              [
+                "simulator-driver",
+                4
+              ],
+              [
+                "design-system-reviewer",
+                4
+              ],
+              [
+                "docs-researcher",
+                4
+              ],
+              [
+                "rn-perf-auditor",
+                3
+              ]
+            ],
+            "top_skills": [
+              [
+                "review-diff",
+                7
+              ],
+              [
+                "systematic-debugging",
+                7
+              ],
+              [
+                "cerberus",
+                6
+              ],
+              [
+                "verify-change",
+                6
+              ],
+              [
+                "share-extension-imports",
+                6
+              ],
+              [
+                "capture-learning",
+                5
+              ],
+              [
+                "implement-feature",
+                5
+              ],
+              [
+                "slim-pr-description",
+                5
+              ],
+              [
+                "simulator-screenshot-verify",
+                4
+              ],
+              [
+                "retro",
+                3
+              ],
+              [
+                "track-week",
+                3
+              ],
+              [
+                "spike-plan",
+                2
+              ],
+              [
+                "writing-plans",
+                2
+              ],
+              [
+                "generate-qa-notes",
+                2
+              ],
+              [
+                "figma-implement-design",
+                2
+              ]
+            ],
+            "skills_all": [
+              [
+                "review-diff",
+                7
+              ],
+              [
+                "systematic-debugging",
+                7
+              ],
+              [
+                "cerberus",
+                6
+              ],
+              [
+                "verify-change",
+                6
+              ],
+              [
+                "share-extension-imports",
+                6
+              ],
+              [
+                "capture-learning",
+                5
+              ],
+              [
+                "implement-feature",
+                5
+              ],
+              [
+                "slim-pr-description",
+                5
+              ],
+              [
+                "simulator-screenshot-verify",
+                4
+              ],
+              [
+                "retro",
+                3
+              ],
+              [
+                "track-week",
+                3
+              ],
+              [
+                "spike-plan",
+                2
+              ],
+              [
+                "writing-plans",
+                2
+              ],
+              [
+                "generate-qa-notes",
+                2
+              ],
+              [
+                "figma-implement-design",
+                2
+              ],
+              [
+                "brainstorm",
+                2
+              ],
+              [
+                "sdd-tasks",
+                1
+              ],
+              [
+                "difficult-bug",
+                1
+              ],
+              [
+                "context7-mcp",
+                1
+              ],
+              [
+                "jira-ticket-authoring",
+                1
+              ],
+              [
+                "find-docs",
+                1
+              ],
+              [
+                "run-skill-generator",
+                1
+              ]
+            ],
+            "models": [
+              [
+                "claude-sonnet-5",
+                4240
+              ],
+              [
+                "claude-opus-5",
+                1376
+              ],
+              [
+                "claude-haiku-4-5-20251001",
+                1186
+              ],
+              [
+                "<synthetic>",
+                14
+              ]
+            ]
+          },
+          "tools": {
+            "agent_calls": 80,
+            "mcp_servers_distinct": 10,
+            "clis_distinct": 37,
+            "toolsearch_calls": 72,
+            "task_tool_calls": 0,
+            "cli_calls": 2550,
+            "mcp_calls": 74,
+            "tool_diversity": 47,
+            "tool_entropy_normalized": 0.458,
+            "mcp_knowledge_calls": 20,
+            "mcp_knowledge_servers": 1,
+            "mcp_knowledge_server_names": [
+              "context7"
+            ],
+            "mcp_grounded_sessions": 10,
+            "mcp_write_sessions": 18,
+            "mcp_subcategory_breakdown": {
+              "communication": {
+                "calls": 14,
+                "servers": 2
+              },
+              "data": {
+                "calls": 8,
+                "servers": 1
+              },
+              "design": {
+                "calls": 12,
+                "servers": 1
+              },
+              "infra": {
+                "calls": 1,
+                "servers": 1
+              },
+              "knowledge": {
+                "calls": 20,
+                "servers": 1
+              },
+              "other": {
+                "calls": 13,
+                "servers": 3
+              },
+              "project": {
+                "calls": 6,
+                "servers": 2
+              }
+            },
+            "top_tools": [
+              [
+                "Bash",
+                1740
+              ],
+              [
+                "Read",
+                939
+              ],
+              [
+                "Edit",
+                321
+              ],
+              [
+                "Grep",
+                162
+              ],
+              [
+                "Write",
+                124
+              ],
+              [
+                "Agent",
+                80
+              ],
+              [
+                "ToolSearch",
+                72
+              ],
+              [
+                "AskUserQuestion",
+                54
+              ],
+              [
+                "Glob",
+                43
+              ],
+              [
+                "WebFetch",
+                42
+              ],
+              [
+                "WebSearch",
+                32
+              ],
+              [
+                "Skill",
+                20
+              ],
+              [
+                "ExitPlanMode",
+                11
+              ],
+              [
+                "mcp__context7__query-docs",
+                11
+              ],
+              [
+                "TaskOutput",
+                11
+              ],
+              [
+                "TodoWrite",
+                10
+              ],
+              [
+                "mcp__context7__resolve-library-id",
+                9
+              ],
+              [
+                "ReportFindings",
+                6
+              ],
+              [
+                "mcp__claude_ai_Google_Calendar__list_events",
+                5
+              ],
+              [
+                "mcp__claude_ai_Figma__get_design_context",
+                5
+              ]
+            ]
+          },
+          "token_usage": {
+            "by_model": []
+          },
+          "month": "2026-08"
+        },
+        {
+          "scoring_inputs_version": 19,
+          "aq_version": 19,
+          "gstack_version": 19,
+          "score_contract_id": "19:19:19",
+          "source": "claude",
+          "volume": {
+            "total_sessions": 18,
+            "total_prompts": 178,
+            "total_instructions": 206,
+            "tool_calls_total": 2679,
+            "sidechain_tool_calls": 1251,
+            "thinking_blocks": 1577
+          },
+          "velocity": {
+            "active_hours": 22.2,
+            "tool_churn_edit_write": 6203,
+            "shell_authored_lines_est": 380
+          },
+          "behavior": {
+            "planning_ratio_explore_to_doing": 1.91,
+            "actions_per_prompt": 6.9,
+            "questions_asked": 22,
+            "error_recovery_ratio": 0.929,
+            "error_rate_per_100_tools": 3.1,
+            "api_errors_retries": 5,
+            "fanout_median": 3,
+            "max_session_fanout": 14,
+            "parallel_dispatch_turns": null,
+            "delegating_sessions": 13,
+            "parallel_session_share": 0.692,
+            "shell_test_runs": 44,
+            "plan_sessions": 5,
+            "planning_skill_sessions": 5,
+            "eligible_change_sessions": 11,
+            "test_covered_change_sessions": 11,
+            "planned_eligible_sessions": 4,
+            "evidence_eligible_sessions": 11,
+            "ordered_facts_state": "measured",
+            "sidechain_label_state": "measured",
+            "linked_model_pairs": [],
+            "linked_model_routing_state": "unsupported",
+            "delegate_actions": 57,
+            "background_tasks": 34,
+            "iteration_depth_mean": 2.31,
+            "iteration_depth_p90": 6,
+            "iteration_depth_max": 17,
+            "files_hammered_over_15x": 1,
+            "no_tool_activity": false,
+            "orchestratable_sessions": 10,
+            "delegated_orchestratable_sessions": 10,
+            "planning_skill_eligible_sessions": 18,
+            "planning_skill_unmeasured_sessions": 0,
+            "planning_skill_session_scope_state": "measured",
+            "planning_skill_session_share": 0.277778,
+            "planning_skill_session_coverage": 1.0
+          },
+          "stack": {
+            "skills_distinct": 13,
+            "skills_total": 43,
+            "compounding_writes": 8,
+            "subagent_types_distinct": 11,
+            "max_session_subagent_types": 6,
+            "subagent_types": [
+              [
+                "explore-codebase",
+                22
+              ],
+              [
+                "general-purpose",
+                11
+              ],
+              [
+                "code-reviewer",
+                6
+              ],
+              [
+                "simulator-driver",
+                5
+              ],
+              [
+                "Explore",
+                4
+              ],
+              [
+                "jira-scribe",
+                3
+              ],
+              [
+                "Plan",
+                2
+              ],
+              [
+                "security-reviewer",
+                1
+              ],
+              [
+                "docs-researcher",
+                1
+              ],
+              [
+                "design-system-reviewer",
+                1
+              ]
+            ],
+            "top_skills": [
+              [
+                "slim-pr-description",
+                10
+              ],
+              [
+                "review-diff",
+                8
+              ],
+              [
+                "systematic-debugging",
+                6
+              ],
+              [
+                "code-review",
+                3
+              ],
+              [
+                "implement-feature",
+                3
+              ],
+              [
+                "track-week",
+                3
+              ],
+              [
+                "share-extension-imports",
+                2
+              ],
+              [
+                "cerberus",
+                2
+              ],
+              [
+                "spike-plan",
+                2
+              ],
+              [
+                "capture-learning",
+                1
+              ],
+              [
+                "generate-qa-notes",
+                1
+              ],
+              [
+                "find-docs",
+                1
+              ],
+              [
+                "writing-plans",
+                1
+              ]
+            ],
+            "skills_all": [
+              [
+                "slim-pr-description",
+                10
+              ],
+              [
+                "review-diff",
+                8
+              ],
+              [
+                "systematic-debugging",
+                6
+              ],
+              [
+                "code-review",
+                3
+              ],
+              [
+                "implement-feature",
+                3
+              ],
+              [
+                "track-week",
+                3
+              ],
+              [
+                "share-extension-imports",
+                2
+              ],
+              [
+                "cerberus",
+                2
+              ],
+              [
+                "spike-plan",
+                2
+              ],
+              [
+                "capture-learning",
+                1
+              ],
+              [
+                "generate-qa-notes",
+                1
+              ],
+              [
+                "find-docs",
+                1
+              ],
+              [
+                "writing-plans",
+                1
+              ]
+            ],
+            "models": [
+              [
+                "claude-sonnet-5",
+                3355
+              ],
+              [
+                "claude-haiku-4-5-20251001",
+                1423
+              ],
+              [
+                "claude-opus-5",
+                333
+              ],
+              [
+                "<synthetic>",
+                5
+              ]
+            ]
+          },
+          "tools": {
+            "agent_calls": 57,
+            "mcp_servers_distinct": 6,
+            "clis_distinct": 24,
+            "toolsearch_calls": 46,
+            "task_tool_calls": 0,
+            "cli_calls": 1329,
+            "mcp_calls": 32,
+            "tool_diversity": 30,
+            "tool_entropy_normalized": 0.524,
+            "mcp_knowledge_calls": 6,
+            "mcp_knowledge_servers": 2,
+            "mcp_knowledge_server_names": [
+              "codegraph",
+              "context7"
+            ],
+            "mcp_grounded_sessions": 12,
+            "mcp_write_sessions": 15,
+            "mcp_subcategory_breakdown": {
+              "communication": {
+                "calls": 3,
+                "servers": 1
+              },
+              "data": {
+                "calls": 10,
+                "servers": 1
+              },
+              "knowledge": {
+                "calls": 6,
+                "servers": 2
+              },
+              "other": {
+                "calls": 3,
+                "servers": 1
+              },
+              "project": {
+                "calls": 10,
+                "servers": 1
+              }
+            },
+            "top_tools": [
+              [
+                "Bash",
+                1086
+              ],
+              [
+                "Read",
+                762
+              ],
+              [
+                "Grep",
+                235
+              ],
+              [
+                "Edit",
+                201
+              ],
+              [
+                "Glob",
+                95
+              ],
+              [
+                "Agent",
+                57
+              ],
+              [
+                "ToolSearch",
+                46
+              ],
+              [
+                "ScheduleWakeup",
+                42
+              ],
+              [
+                "Write",
+                35
+              ],
+              [
+                "AskUserQuestion",
+                22
+              ],
+              [
+                "Skill",
+                18
+              ],
+              [
+                "WebSearch",
+                15
+              ],
+              [
+                "WebFetch",
+                11
+              ],
+              [
+                "ExitPlanMode",
+                8
+              ],
+              [
+                "mcp__claude_ai_Atlassian__getJiraIssue",
+                7
+              ],
+              [
+                "TaskStop",
+                4
+              ],
+              [
+                "ReportFindings",
+                4
+              ],
+              [
+                "EnterPlanMode",
+                3
+              ],
+              [
+                "mcp__claude_ai_Atlassian__getAccessibleAtlassianResources",
+                3
+              ],
+              [
+                "mcp__time__get_current_time",
+                3
+              ]
+            ]
+          },
+          "token_usage": {
+            "by_model": []
+          },
+          "month": "2026-09"
+        }
+      ]
+    }
+  },
+  "profiles_by_source": {
+    "by_source": {
+      "claude": {
+        "aq": {
+          "aq_0_100": 92,
+          "tier": "Elite",
+          "pillars": [
+            {
+              "name": "Breadth",
+              "weight": 30,
+              "score": 87.6,
+              "axes": [
+                {
+                  "name": "Orchestration",
+                  "base_weight": 33,
+                  "weight": 33,
+                  "normalized_score": 0.888,
+                  "score": 29.3,
+                  "signals": {
+                    "subagent_types": 15,
+                    "fanout_median": 3,
+                    "o_harn": 1.0,
+                    "frequency": 0.917,
+                    "frequency_score": 1.0,
+                    "frequency_confidence": 1.0,
+                    "frequency_weight": 0.3,
+                    "coordination_quality": 0.84,
+                    "orchestratable_sessions": 24,
+                    "delegated_orchestratable_sessions": 22
+                  }
+                },
+                {
+                  "name": "Skill fluency",
+                  "base_weight": 22,
+                  "weight": 22,
+                  "normalized_score": 0.83,
+                  "score": 18.3,
+                  "signals": {
+                    "skills_distinct": 23,
+                    "tool_calls": 6429,
+                    "skills_total": 116,
+                    "skills_total_per_call": 0.018043,
+                    "skills_total_per_call_target": 0.009,
+                    "process_skills_matched": true
+                  }
+                },
+                {
+                  "name": "Tool command (MCP + CLI)",
+                  "base_weight": 28,
+                  "weight": 28,
+                  "normalized_score": 0.829166666666667,
+                  "score": 23.2,
+                  "signals": {
+                    "mcp_servers": 11,
+                    "clis": 37,
+                    "tool_calls": 6429,
+                    "toolsearch_calls": 118
+                  }
+                },
+                {
+                  "name": "Discipline",
+                  "base_weight": 17,
+                  "weight": 17,
+                  "normalized_score": 0.986666666666667,
+                  "score": 16.8,
+                  "signals": {
+                    "tool_calls": 6429,
+                    "task_tool_calls": 0,
+                    "planning_practice_share": 0.3396,
+                    "planning_practice_target": 0.3,
+                    "planning_practice_eligible_sessions": 53
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Craft",
+              "weight": 35,
+              "score": 93.0,
+              "axes": [
+                {
+                  "name": "Verification",
+                  "base_weight": 35,
+                  "weight": 35,
+                  "normalized_score": 0.8,
+                  "score": 28.0,
+                  "signals": {
+                    "tool_calls": 6429,
+                    "shell_test_runs": 97,
+                    "test_covered_change_sessions": 15,
+                    "eligible_change_sessions": 25,
+                    "test_coverage": 0.6,
+                    "review_skills": 36,
+                    "review_skills_per_call": 0.0056,
+                    "review_skills_per_call_target": 0.004
+                  }
+                },
+                {
+                  "name": "Grounding",
+                  "base_weight": 25,
+                  "weight": 25,
+                  "normalized_score": 1.0,
+                  "score": 25.0,
+                  "signals": {
+                    "planning_ratio": 1.62
+                  }
+                },
+                {
+                  "name": "Context Intelligence",
+                  "base_weight": 20,
+                  "weight": 20,
+                  "normalized_score": 1.0,
+                  "score": 20.0,
+                  "signals": {
+                    "grounded_sessions": 25,
+                    "write_sessions": 25,
+                    "total_sessions": 53,
+                    "coverage": 1.0,
+                    "target_coverage": 0.6,
+                    "grounded_session_rule": "knowledge-MCP call OR explore-class project/data/design MCP call before a later Edit/Write/MultiEdit/NotebookEdit in the same session",
+                    "score_formula": "coverage = evidence_eligible_sessions / eligible_change_sessions; score = min(1, coverage / 0.60)"
+                  }
+                },
+                {
+                  "name": "Compounding",
+                  "base_weight": 20,
+                  "weight": 20,
+                  "normalized_score": 1.0,
+                  "score": 20.0,
+                  "signals": {
+                    "tool_calls": 6429,
+                    "compounding_writes": 58,
+                    "compounding_writes_per_call": 0.009022,
+                    "compounding_writes_per_call_target": 0.0018,
+                    "compounding_skills_matched": true
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Efficiency",
+              "weight": 20,
+              "score": 89.4,
+              "axes": [
+                {
+                  "name": "Recovery",
+                  "base_weight": 50,
+                  "weight": 100,
+                  "normalized_score": 0.894270088660756,
+                  "score": 89.4,
+                  "signals": {
+                    "recovery_ratio": 0.936,
+                    "api_retries": 44,
+                    "api_per_100_tools": 0.684
+                  }
+                }
+              ],
+              "not_applicable": [
+                "Steering leverage"
+              ]
+            },
+            {
+              "name": "Savvy",
+              "weight": 15,
+              "score": 100.0,
+              "axes": [
+                {
+                  "name": "Model mix",
+                  "base_weight": 50,
+                  "weight": 50,
+                  "normalized_score": 1.0,
+                  "score": 50.0,
+                  "signals": {
+                    "distinct_models": 4,
+                    "offload_share": 0.36,
+                    "routing": {
+                      "state": "unmeasured",
+                      "score": null,
+                      "successful_lower_tier_pairs": 0,
+                      "eligible_completed_substantive_pairs": 0,
+                      "excluded_reasons": {}
+                    }
+                  },
+                  "partial_terms": {
+                    "scored": 2,
+                    "total": 3,
+                    "weight_scored": 0.7
+                  }
+                },
+                {
+                  "name": "Token economy",
+                  "base_weight": 50,
+                  "weight": 50,
+                  "normalized_score": 1.0,
+                  "score": 50.0,
+                  "signals": {
+                    "tool_calls": 6429,
+                    "cli_share": 0.97
+                  }
+                }
+              ]
+            }
+          ],
+          "score_contract_id": "19:19:19",
+          "steering_leverage": {
+            "state": "withheld_unvalidated_band",
+            "actions_per_prompt": 7.7
+          },
+          "mcp_vs_cli": {
+            "cli_calls": 3879,
+            "cli_distinct": 37,
+            "mcp_calls": 106,
+            "mcp_distinct": 11,
+            "ratio": 36.6
+          },
+          "tool_diversity": {
+            "distinct": 52,
+            "entropy": 0.455
+          }
+        },
+        "archetype": {
+          "title": "Elite",
+          "quote": "You operate at the top \u2014 broad machinery, well used. Your thinnest axis is breadth \u2014 that's where the next gain is."
+        },
+        "scores": {
+          "execution": {
+            "value": 6.6,
+            "gloss": "How much you ship, at AI leverage",
+            "drag_note": "Tool output rate is dragging this down \u2014 4.3e+02 tool-authored lines/hr, target ~1e+03.",
+            "subs": [
+              {
+                "label": "Tool output rate",
+                "your_value": 427.8004073319755,
+                "target": 1000,
+                "unit": "tool-authored lines/hr",
+                "weight": 0.6,
+                "pct": 0.4278004073319755,
+                "direction": "higher",
+                "is_drag": true,
+                "verdict": "weak",
+                "score_pct": 43,
+                "display_value": "428 tool-authored lines/hr",
+                "display_target": "1,000 tool-authored lines/hr",
+                "narrative": "Tool output rate is weak (428 tool-authored lines/hr, target 1,000 tool-authored lines/hr \u2014 below target, scoring 43%)."
+              },
+              {
+                "label": "Delegation & parallelism",
+                "your_value": 0.5331491712707183,
+                "target": 0.3,
+                "unit": "agent-runs/prompt",
+                "weight": 0.4,
+                "pct": 1.0,
+                "direction": "higher",
+                "is_drag": false,
+                "verdict": "excellent",
+                "score_pct": 100,
+                "display_value": "0.53 agent-runs/prompt",
+                "display_target": "0.3 agent-runs/prompt",
+                "narrative": "Delegation & parallelism is excellent (0.53 agent-runs/prompt, target 0.3 agent-runs/prompt \u2014 well above target, scoring 100%)."
+              }
+            ],
+            "axis_verdict": "good",
+            "score_out_of_10": "6.6 / 10",
+            "drag_narrative": "Tool output rate is the weakest contributor, scoring 43%. Your value: 428 tool-authored lines/hr (target: 1,000 tool-authored lines/hr, higher is better).",
+            "axis_narrative": "Execution scores 6.6/10 (good). Strongest: Delegation & parallelism (100%); weakest: Tool output rate (43%)."
+          },
+          "planning": {
+            "value": 9.9,
+            "gloss": "Think before you build",
+            "drag_note": "Ordered planning readiness is dragging this down \u2014 0.48 eligible-session coverage, target ~0.5.",
+            "subs": [
+              {
+                "label": "Explore-before-build",
+                "your_value": 1.62,
+                "target": 0.65,
+                "unit": "explore/doing ratio",
+                "weight": 0.3,
+                "pct": 1.0,
+                "direction": "higher",
+                "is_drag": false,
+                "verdict": "excellent",
+                "score_pct": 100,
+                "display_value": "1.6 explore/doing ratio",
+                "display_target": "0.65 explore/doing ratio",
+                "narrative": "Explore-before-build is excellent (1.6 explore/doing ratio, target 0.65 explore/doing ratio \u2014 well above target, scoring 100%)."
+              },
+              {
+                "label": "Reasoning depth",
+                "your_value": 67.11320754716981,
+                "target": 12.0,
+                "unit": "thinking blocks/session",
+                "weight": 0.3,
+                "pct": 1.0,
+                "direction": "higher",
+                "is_drag": false,
+                "verdict": "excellent",
+                "score_pct": 100,
+                "display_value": "67 thinking blocks/session",
+                "display_target": "12 thinking blocks/session",
+                "narrative": "Reasoning depth is excellent (67 thinking blocks/session, target 12 thinking blocks/session \u2014 well above target, scoring 100%)."
+              },
+              {
+                "label": "Planning practice",
+                "your_value": 0.33962264150943394,
+                "target": 0.3,
+                "unit": "planning sessions/session",
+                "weight": 0.25,
+                "pct": 1.0,
+                "direction": "higher",
+                "is_drag": false,
+                "scope_state": "measured",
+                "planning_skill_sessions": 18,
+                "planning_skill_eligible_sessions": 53,
+                "planning_skill_unmeasured_sessions": 0,
+                "planning_skill_session_share": 0.33962264150943394,
+                "planning_skill_session_coverage": 1.0,
+                "coverage": 1.0,
+                "base_weight": 0.25,
+                "effective_weight": 0.25,
+                "verdict": "excellent",
+                "score_pct": 100,
+                "display_value": "0.34 planning sessions/session",
+                "display_target": "0.3 planning sessions/session",
+                "narrative": "Planning practice is excellent (0.34 planning sessions/session, target 0.3 planning sessions/session \u2014 well above target, scoring 100%)."
+              },
+              {
+                "label": "Ordered planning readiness",
+                "your_value": 0.48,
+                "target": 0.5,
+                "unit": "eligible-session coverage",
+                "weight": 0.15,
+                "pct": 0.96,
+                "direction": "higher",
+                "is_drag": true,
+                "verdict": "excellent",
+                "score_pct": 96,
+                "display_value": "0.48 eligible-session coverage",
+                "display_target": "0.5 eligible-session coverage",
+                "narrative": "Ordered planning readiness is excellent (0.48 eligible-session coverage, target 0.5 eligible-session coverage \u2014 well above target, scoring 96%)."
+              }
+            ],
+            "axis_verdict": "excellent",
+            "score_out_of_10": "9.9 / 10",
+            "drag_narrative": "Ordered planning readiness is the weakest contributor, scoring 96%. Your value: 0.48 eligible-session coverage (target: 0.5 eligible-session coverage, higher is better).",
+            "axis_narrative": "Planning scores 9.9/10 (excellent). Strongest: Explore-before-build (100%); weakest: Ordered planning readiness (96%)."
+          },
+          "engineering": {
+            "value": 8.7,
+            "gloss": "Craft and low rework",
+            "drag_note": "Low errors is dragging this down \u2014 3.6 errors/100 tools (target \u226410).",
+            "subs": [
+              {
+                "label": "Low rework",
+                "your_value": 2.16,
+                "target": 2.0,
+                "unit": "mean file-edit depth",
+                "weight": 0.3,
+                "pct": 0.98,
+                "direction": "lower",
+                "is_drag": false,
+                "verdict": "excellent",
+                "score_pct": 98,
+                "display_value": "2.2 mean file-edit depth",
+                "display_target": "\u2264 2 mean file-edit depth",
+                "narrative": "Low rework is excellent (2.2 mean file-edit depth, target \u2264 2 mean file-edit depth \u2014 well within target, scoring 98%)."
+              },
+              {
+                "label": "Clean iteration",
+                "your_value": 4,
+                "target": 3.0,
+                "unit": "p90 file-edit depth",
+                "weight": 0.25,
+                "pct": 0.8888888888888888,
+                "direction": "lower",
+                "is_drag": false,
+                "verdict": "good",
+                "score_pct": 89,
+                "display_value": "4 p90 file-edit depth",
+                "display_target": "\u2264 3 p90 file-edit depth",
+                "narrative": "Clean iteration is good (4 p90 file-edit depth, target \u2264 3 p90 file-edit depth \u2014 near target threshold, scoring 89%)."
+              },
+              {
+                "label": "Focus",
+                "your_value": 0.03773584905660377,
+                "target": 0.25,
+                "unit": "hammered-files/session",
+                "weight": 0.2,
+                "pct": 0.8490566037735849,
+                "direction": "lower",
+                "is_drag": false,
+                "verdict": "good",
+                "score_pct": 85,
+                "display_value": "0.038 hammered-files/session",
+                "display_target": "\u2264 0.25 hammered-files/session",
+                "narrative": "Focus is good (0.038 hammered-files/session, target \u2264 0.25 hammered-files/session \u2014 near target threshold, scoring 85%)."
+              },
+              {
+                "label": "Quality ceremony",
+                "your_value": 2.358490566037736,
+                "target": 3.0,
+                "unit": "quality-skills/session",
+                "weight": 0.15,
+                "pct": 0.7861635220125787,
+                "direction": "higher",
+                "is_drag": false,
+                "verdict": "good",
+                "score_pct": 79,
+                "display_value": "2.4 quality-skills/session",
+                "display_target": "3 quality-skills/session",
+                "narrative": "Quality ceremony is good (2.4 quality-skills/session, target 3 quality-skills/session \u2014 approaching target, scoring 79%)."
+              },
+              {
+                "label": "Low errors",
+                "your_value": 3.6,
+                "target": 10.0,
+                "unit": "errors/100 tools",
+                "weight": 0.1,
+                "pct": 0.64,
+                "direction": "lower",
+                "is_drag": true,
+                "verdict": "adequate",
+                "score_pct": 64,
+                "display_value": "3.6 errors/100 tools",
+                "display_target": "\u2264 10 errors/100 tools",
+                "narrative": "Low errors is adequate (3.6 errors/100 tools, target \u2264 10 errors/100 tools \u2014 near target threshold, scoring 64%)."
+              }
+            ],
+            "axis_verdict": "excellent",
+            "score_out_of_10": "8.7 / 10",
+            "drag_narrative": "Low errors is the weakest contributor, scoring 64%. Your value: 3.6 errors/100 tools (target: \u2264 10 errors/100 tools, lower is better).",
+            "axis_narrative": "Engineering scores 8.7/10 (excellent). Strongest: Low rework (98%); weakest: Low errors (64%)."
+          }
+        },
+        "steering": {
+          "label": "Medium leash",
+          "gloss": "autonomous stretches, hands-on steering",
+          "detail": "~8 actions per turn before you weigh in \u00b7 the agent checked in on 17% of your prompts"
+        },
+        "growth_edges": [
+          {
+            "eyebrow": "Go deeper",
+            "title": "You're balanced \u2014 your edge is depth",
+            "advice": "You're even across the build sprint, so the next gear isn't a weak spot to patch \u2014 it's depth. Add a short retro after each session and let the learnings compound session over session. (gstack names this /retro \u2014 the Reflect stage.)",
+            "commands": [
+              "/retro"
+            ],
+            "axis": null,
+            "severity": "low"
+          }
+        ],
+        "signature_moves": [
+          {
+            "tag": "Think",
+            "title": "You think before you touch the diff",
+            "evidence": "3,557 reasoning blocks (~67/session) before edits land \u2014 you deliberate hard, then commit."
+          },
+          {
+            "tag": "Build",
+            "title": "You run a team, not a tool",
+            "evidence": "193 delegated & backgrounded agent runs with the shell as your top tool. You parallelize and grind rather than babysit one chat."
+          }
+        ],
+        "model_usage": [
+          {
+            "model_id": "claude-sonnet-5",
+            "model": "Sonnet 5",
+            "count": 7595,
+            "pct": 0.637,
+            "tokens_input": 15162,
+            "tokens_output": 6896447,
+            "tokens_cache_read": 902243881,
+            "tokens_cache_creation": 45745130
+          },
+          {
+            "model_id": "claude-haiku-4-5-20251001",
+            "model": "Haiku 4.5",
+            "count": 2609,
+            "pct": 0.219,
+            "tokens_input": 30568,
+            "tokens_output": 594765,
+            "tokens_cache_read": 92839065,
+            "tokens_cache_creation": 7537952
+          },
+          {
+            "model_id": "claude-opus-5",
+            "model": "Opus 5",
+            "count": 1709,
+            "pct": 0.143,
+            "tokens_input": 13813,
+            "tokens_output": 1440172,
+            "tokens_cache_read": 109656161,
+            "tokens_cache_creation": 10849587
+          },
+          {
+            "model_id": "<synthetic>",
+            "model": "<synthetic>",
+            "count": 19,
+            "pct": 0.002,
+            "tokens_input": 0,
+            "tokens_output": 0,
+            "tokens_cache_read": 0,
+            "tokens_cache_creation": 0
+          }
+        ]
+      }
+    },
+    "aggregate": {
+      "aq_diagnostic": {
+        "aq_0_100": 92,
+        "tier": "Elite",
+        "pillars": [
+          {
+            "name": "Breadth",
+            "weight": 30,
+            "score": 87.6
+          },
+          {
+            "name": "Craft",
+            "weight": 35,
+            "score": 93.0
+          },
+          {
+            "name": "Efficiency",
+            "weight": 20,
+            "score": 89.4
+          },
+          {
+            "name": "Savvy",
+            "weight": 15,
+            "score": 100.0
+          }
+        ],
+        "score_contract_id": "19:19:19"
+      },
+      "canonical_aq": "profile.aq",
+      "archetype": {
+        "title": "Elite",
+        "quote": "You operate at the top \u2014 broad machinery, well used. Your thinnest axis is breadth \u2014 that's where the next gain is."
+      },
+      "scores": {
+        "execution": {
+          "value": 6.6,
+          "gloss": "How much you ship, at AI leverage",
+          "drag_note": "Tool output rate is dragging this down \u2014 4.3e+02 tool-authored lines/hr, target ~1e+03.",
+          "subs": [
+            {
+              "label": "Tool output rate",
+              "your_value": 427.8004073319755,
+              "target": 1000,
+              "unit": "tool-authored lines/hr",
+              "weight": 0.6,
+              "pct": 0.4278004073319755,
+              "direction": "higher",
+              "is_drag": true,
+              "verdict": "weak",
+              "score_pct": 43,
+              "display_value": "428 tool-authored lines/hr",
+              "display_target": "1,000 tool-authored lines/hr",
+              "narrative": "Tool output rate is weak (428 tool-authored lines/hr, target 1,000 tool-authored lines/hr \u2014 below target, scoring 43%)."
+            },
+            {
+              "label": "Delegation & parallelism",
+              "your_value": 0.5331491712707183,
+              "target": 0.3,
+              "unit": "agent-runs/prompt",
+              "weight": 0.4,
+              "pct": 1.0,
+              "direction": "higher",
+              "is_drag": false,
+              "verdict": "excellent",
+              "score_pct": 100,
+              "display_value": "0.53 agent-runs/prompt",
+              "display_target": "0.3 agent-runs/prompt",
+              "narrative": "Delegation & parallelism is excellent (0.53 agent-runs/prompt, target 0.3 agent-runs/prompt \u2014 well above target, scoring 100%)."
+            }
+          ],
+          "axis_verdict": "good",
+          "score_out_of_10": "6.6 / 10",
+          "drag_narrative": "Tool output rate is the weakest contributor, scoring 43%. Your value: 428 tool-authored lines/hr (target: 1,000 tool-authored lines/hr, higher is better).",
+          "axis_narrative": "Execution scores 6.6/10 (good). Strongest: Delegation & parallelism (100%); weakest: Tool output rate (43%)."
+        },
+        "planning": {
+          "value": 9.9,
+          "gloss": "Think before you build",
+          "drag_note": "Ordered planning readiness is dragging this down \u2014 0.48 eligible-session coverage, target ~0.5.",
+          "subs": [
+            {
+              "label": "Explore-before-build",
+              "your_value": 1.62,
+              "target": 0.65,
+              "unit": "explore/doing ratio",
+              "weight": 0.3,
+              "pct": 1.0,
+              "direction": "higher",
+              "is_drag": false,
+              "verdict": "excellent",
+              "score_pct": 100,
+              "display_value": "1.6 explore/doing ratio",
+              "display_target": "0.65 explore/doing ratio",
+              "narrative": "Explore-before-build is excellent (1.6 explore/doing ratio, target 0.65 explore/doing ratio \u2014 well above target, scoring 100%)."
+            },
+            {
+              "label": "Reasoning depth",
+              "your_value": 67.11320754716981,
+              "target": 12.0,
+              "unit": "thinking blocks/session",
+              "weight": 0.3,
+              "pct": 1.0,
+              "direction": "higher",
+              "is_drag": false,
+              "verdict": "excellent",
+              "score_pct": 100,
+              "display_value": "67 thinking blocks/session",
+              "display_target": "12 thinking blocks/session",
+              "narrative": "Reasoning depth is excellent (67 thinking blocks/session, target 12 thinking blocks/session \u2014 well above target, scoring 100%)."
+            },
+            {
+              "label": "Planning practice",
+              "your_value": 0.33962264150943394,
+              "target": 0.3,
+              "unit": "planning sessions/session",
+              "weight": 0.25,
+              "pct": 1.0,
+              "direction": "higher",
+              "is_drag": false,
+              "scope_state": "measured",
+              "planning_skill_sessions": 18,
+              "planning_skill_eligible_sessions": 53,
+              "planning_skill_unmeasured_sessions": 0,
+              "planning_skill_session_share": 0.33962264150943394,
+              "planning_skill_session_coverage": 1.0,
+              "coverage": 1.0,
+              "base_weight": 0.25,
+              "effective_weight": 0.25,
+              "verdict": "excellent",
+              "score_pct": 100,
+              "display_value": "0.34 planning sessions/session",
+              "display_target": "0.3 planning sessions/session",
+              "narrative": "Planning practice is excellent (0.34 planning sessions/session, target 0.3 planning sessions/session \u2014 well above target, scoring 100%)."
+            },
+            {
+              "label": "Ordered planning readiness",
+              "your_value": 0.48,
+              "target": 0.5,
+              "unit": "eligible-session coverage",
+              "weight": 0.15,
+              "pct": 0.96,
+              "direction": "higher",
+              "is_drag": true,
+              "verdict": "excellent",
+              "score_pct": 96,
+              "display_value": "0.48 eligible-session coverage",
+              "display_target": "0.5 eligible-session coverage",
+              "narrative": "Ordered planning readiness is excellent (0.48 eligible-session coverage, target 0.5 eligible-session coverage \u2014 well above target, scoring 96%)."
+            }
+          ],
+          "axis_verdict": "excellent",
+          "score_out_of_10": "9.9 / 10",
+          "drag_narrative": "Ordered planning readiness is the weakest contributor, scoring 96%. Your value: 0.48 eligible-session coverage (target: 0.5 eligible-session coverage, higher is better).",
+          "axis_narrative": "Planning scores 9.9/10 (excellent). Strongest: Explore-before-build (100%); weakest: Ordered planning readiness (96%)."
+        },
+        "engineering": {
+          "value": 8.7,
+          "gloss": "Craft and low rework",
+          "drag_note": "Low errors is dragging this down \u2014 3.6 errors/100 tools (target \u226410).",
+          "subs": [
+            {
+              "label": "Low rework",
+              "your_value": 2.16,
+              "target": 2.0,
+              "unit": "mean file-edit depth",
+              "weight": 0.3,
+              "pct": 0.98,
+              "direction": "lower",
+              "is_drag": false,
+              "verdict": "excellent",
+              "score_pct": 98,
+              "display_value": "2.2 mean file-edit depth",
+              "display_target": "\u2264 2 mean file-edit depth",
+              "narrative": "Low rework is excellent (2.2 mean file-edit depth, target \u2264 2 mean file-edit depth \u2014 well within target, scoring 98%)."
+            },
+            {
+              "label": "Clean iteration",
+              "your_value": 4.0,
+              "target": 3.0,
+              "unit": "p90 file-edit depth",
+              "weight": 0.25,
+              "pct": 0.8888888888888888,
+              "direction": "lower",
+              "is_drag": false,
+              "verdict": "good",
+              "score_pct": 89,
+              "display_value": "4 p90 file-edit depth",
+              "display_target": "\u2264 3 p90 file-edit depth",
+              "narrative": "Clean iteration is good (4 p90 file-edit depth, target \u2264 3 p90 file-edit depth \u2014 near target threshold, scoring 89%)."
+            },
+            {
+              "label": "Focus",
+              "your_value": 0.03773584905660377,
+              "target": 0.25,
+              "unit": "hammered-files/session",
+              "weight": 0.2,
+              "pct": 0.8490566037735849,
+              "direction": "lower",
+              "is_drag": false,
+              "verdict": "good",
+              "score_pct": 85,
+              "display_value": "0.038 hammered-files/session",
+              "display_target": "\u2264 0.25 hammered-files/session",
+              "narrative": "Focus is good (0.038 hammered-files/session, target \u2264 0.25 hammered-files/session \u2014 near target threshold, scoring 85%)."
+            },
+            {
+              "label": "Quality ceremony",
+              "your_value": 2.358490566037736,
+              "target": 3.0,
+              "unit": "quality-skills/session",
+              "weight": 0.15,
+              "pct": 0.7861635220125787,
+              "direction": "higher",
+              "is_drag": false,
+              "verdict": "good",
+              "score_pct": 79,
+              "display_value": "2.4 quality-skills/session",
+              "display_target": "3 quality-skills/session",
+              "narrative": "Quality ceremony is good (2.4 quality-skills/session, target 3 quality-skills/session \u2014 approaching target, scoring 79%)."
+            },
+            {
+              "label": "Low errors",
+              "your_value": 3.6,
+              "target": 10.0,
+              "unit": "errors/100 tools",
+              "weight": 0.1,
+              "pct": 0.64,
+              "direction": "lower",
+              "is_drag": true,
+              "verdict": "adequate",
+              "score_pct": 64,
+              "display_value": "3.6 errors/100 tools",
+              "display_target": "\u2264 10 errors/100 tools",
+              "narrative": "Low errors is adequate (3.6 errors/100 tools, target \u2264 10 errors/100 tools \u2014 near target threshold, scoring 64%)."
+            }
+          ],
+          "axis_verdict": "excellent",
+          "score_out_of_10": "8.7 / 10",
+          "drag_narrative": "Low errors is the weakest contributor, scoring 64%. Your value: 3.6 errors/100 tools (target: \u2264 10 errors/100 tools, lower is better).",
+          "axis_narrative": "Engineering scores 8.7/10 (excellent). Strongest: Low rework (98%); weakest: Low errors (64%)."
+        }
+      },
+      "steering": {
+        "label": "Medium leash",
+        "gloss": "autonomous stretches, hands-on steering",
+        "detail": "~8 actions per turn before you weigh in \u00b7 the agent checked in on 21% of your prompts"
+      },
+      "growth_edges": [
+        {
+          "eyebrow": "Go deeper",
+          "title": "You're balanced \u2014 your edge is depth",
+          "advice": "You're even across the build sprint, so the next gear isn't a weak spot to patch \u2014 it's depth. Add a short retro after each session and let the learnings compound session over session. (gstack names this /retro \u2014 the Reflect stage.)",
+          "commands": [
+            "/retro"
+          ],
+          "axis": null,
+          "severity": "low"
+        }
+      ],
+      "signature_moves": [
+        {
+          "tag": "Think",
+          "title": "You think before you touch the diff",
+          "evidence": "3,557 reasoning blocks (~67/session) before edits land \u2014 you deliberate hard, then commit."
+        },
+        {
+          "tag": "Build",
+          "title": "You run a team, not a tool",
+          "evidence": "193 delegated & backgrounded agent runs. You parallelize and grind rather than babysit one chat."
+        }
+      ],
+      "model_usage": [],
+      "combination": {
+        "rule": "weighted_mean_except_synthesized_planning",
+        "weight": "tool_calls_total",
+        "weight_exceptions": {
+          "behavior.actions_per_prompt": "total_instructions"
+        },
+        "weights": {
+          "claude": 6429
+        },
+        "axes": {
+          "execution": "tool_volume_weighted_mean",
+          "planning": "recomputed_from_synthesized_corpus",
+          "engineering": "tool_volume_weighted_mean"
+        }
+      }
+    }
+  },
+  "source_usage": {
+    "by_source": {
+      "claude": {
+        "sessions": 53,
+        "prompts": 362,
+        "tool_calls": 6429,
+        "active_hours": 49.1,
+        "sessions_pct": 1.0,
+        "prompts_pct": 1.0,
+        "tool_calls_pct": 1.0,
+        "active_hours_pct": 1.0
+      }
+    },
+    "totals": {
+      "sessions": 53,
+      "prompts": 362,
+      "tool_calls": 6429,
+      "active_hours": 49.1
+    },
+    "primary_metric": "prompts"
+  },
+  "source_usage_monthly": [
+    {
+      "by_source": {
+        "claude": {
+          "sessions": 36,
+          "prompts": 184,
+          "tool_calls": 3750,
+          "active_hours": 26.7,
+          "sessions_pct": 1.0,
+          "prompts_pct": 1.0,
+          "tool_calls_pct": 1.0,
+          "active_hours_pct": 1.0
+        }
+      },
+      "totals": {
+        "sessions": 36,
+        "prompts": 184,
+        "tool_calls": 3750,
+        "active_hours": 26.7
+      },
+      "primary_metric": "prompts",
+      "month": "2026-08"
+    },
+    {
+      "by_source": {
+        "claude": {
+          "sessions": 18,
+          "prompts": 178,
+          "tool_calls": 2679,
+          "active_hours": 22.2,
+          "sessions_pct": 1.0,
+          "prompts_pct": 1.0,
+          "tool_calls_pct": 1.0,
+          "active_hours_pct": 1.0
+        }
+      },
+      "totals": {
+        "sessions": 18,
+        "prompts": 178,
+        "tool_calls": 2679,
+        "active_hours": 22.2
+      },
+      "primary_metric": "prompts",
+      "month": "2026-09"
+    }
+  ],
+  "token_usage": {
+    "total_input": 59543,
+    "total_output": 8931384,
+    "total_cache_read": 1104739107,
+    "total_cache_creation": 64132669,
+    "by_model": [
+      {
+        "model_id": "claude-sonnet-5",
+        "model": "Sonnet 5",
+        "input": 15162,
+        "output": 6896447,
+        "cache_read": 902243881,
+        "cache_creation": 45745130
+      },
+      {
+        "model_id": "claude-opus-5",
+        "model": "Opus 5",
+        "input": 13813,
+        "output": 1440172,
+        "cache_read": 109656161,
+        "cache_creation": 10849587
+      },
+      {
+        "model_id": "claude-haiku-4-5-20251001",
+        "model": "Haiku 4.5",
+        "input": 30568,
+        "output": 594765,
+        "cache_read": 92839065,
+        "cache_creation": 7537952
+      },
+      {
+        "model_id": "<synthetic>",
+        "model": "<synthetic>",
+        "input": 0,
+        "output": 0,
+        "cache_read": 0,
+        "cache_creation": 0
+      }
+    ]
+  },
+  "payload_features": {
+    "version": 1,
+    "supported": [
+      "bucket_scoring_inputs",
+      "upload_size_guard"
+    ],
+    "emitted": [],
+    "omitted": [
+      {
+        "feature": "bucket_scoring_inputs",
+        "reason": "recency_blend_removed"
+      }
+    ],
+    "recency_blend": {
+      "enabled": false
+    }
+  },
+  "timing": {
+    "wall_clock_total_s": 3.024,
+    "discovery_s": 0.002,
+    "accumulate_corpus_s": 2.776,
+    "accumulate_per_source_s": {},
+    "scoring_inputs_by_source_s": 0.0,
+    "compute_aq_s": 0.0,
+    "compute_scores_s": 0.0,
+    "build_summary_s": 0.002
+  }
+}

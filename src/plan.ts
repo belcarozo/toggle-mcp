@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
-import { bestDescriptionFor } from "./ticket.js";
+import { pickSignal, type ContextSignal } from "./context.js";
+import { attributeTicket, withTicketPrefix } from "./ticket.js";
 import {
   atLocalTime,
   clipToWindow,
@@ -16,6 +17,7 @@ import type { CalendarEventInput, Config, DayPlan, ExistingTimeEntry, GitEvent, 
 export interface TicketAttribution {
   ticket: string;
   description: string;
+  weak?: boolean;
 }
 
 export interface PlanDayParams {
@@ -30,6 +32,8 @@ export interface PlanDayParams {
   existingEntries: ExistingTimeEntry[];
   /** The most recent ticket carried forward from an earlier planned day, used when this day has no git signal at all. */
   priorTicket: TicketAttribution | null;
+  /** Session-transcript / caller-supplied notes, consulted only where git signal is weak or absent. */
+  contextSignals?: ContextSignal[];
 }
 
 export interface PlanDayResult {
@@ -78,7 +82,7 @@ function assignTicket(
   const winner = beforeOrAt[0] ?? dominantTicket(dayEvents);
   if (winner) {
     const sameTicketEvents = dayEvents.filter((e) => e.ticket === winner.ticket);
-    return { ticket: winner.ticket, description: bestDescriptionFor(winner.ticket, sameTicketEvents, ticketPattern) };
+    return attributeTicket(winner.ticket, sameTicketEvents, ticketPattern);
   }
   return priorTicket;
 }
@@ -138,15 +142,62 @@ export function splitBlockByCommits(
   let attribution = fallback;
   for (const commit of commits) {
     segments.push({ interval: { start: cursor, end: commit.timestamp }, attribution });
-    attribution = { ticket: commit.ticket, description: bestDescriptionFor(commit.ticket, [commit], ticketPattern) };
+    attribution = attributeTicket(commit.ticket, [commit], ticketPattern);
     cursor = commit.timestamp;
   }
   segments.push({ interval: { start: cursor, end: block.end }, attribution });
   return mergeAdjacentSegments(segments);
 }
 
+const UNASSIGNED_PLACEHOLDER = "(unassigned - fill in by hand)";
+
+/**
+ * Fill a gap in git-derived attribution from the best overlapping context signal, if any -
+ * never touching an attribution that already came from a real commit message. A weak
+ * (branch-slug) attribution gets its description text replaced, keeping its ticket; a fully
+ * unassigned segment is promoted to a ticket entry if the signal names one, else stays
+ * unassigned with the signal's text appended so it's still flagged for manual review.
+ */
+function applyContextSignal(
+  attribution: TicketAttribution | null,
+  interval: Interval,
+  contextSignals: ContextSignal[],
+): { attribution: TicketAttribution | null; unassignedText: string } {
+  if ((attribution && !attribution.weak) || contextSignals.length === 0) {
+    return { attribution, unassignedText: UNASSIGNED_PLACEHOLDER };
+  }
+
+  if (attribution) {
+    // Weak: only a signal that names this exact ticket is trusted to replace the description -
+    // a same-time but unrelated (or ticket-agnostic) note is more likely to mislead than help
+    // when there's already a specific, if unglamorous, branch-derived description.
+    const signal = pickSignal(interval, contextSignals, { requireTicket: attribution.ticket });
+    if (!signal) return { attribution, unassignedText: UNASSIGNED_PLACEHOLDER };
+    return {
+      // Stays `weak: true` - this still isn't a real commit message, so a later gap that
+      // carries this forward as `priorTicket` (no git signal of its own that day/block) must
+      // remain eligible to look up its own, fresher signal instead of freezing this one in.
+      attribution: { ticket: attribution.ticket, description: withTicketPrefix(attribution.ticket, signal.text), weak: true },
+      unassignedText: UNASSIGNED_PLACEHOLDER,
+    };
+  }
+
+  // Fully unassigned: there's no existing ticket to protect, so any overlapping signal helps.
+  const signal = pickSignal(interval, contextSignals);
+  if (!signal) return { attribution: null, unassignedText: UNASSIGNED_PLACEHOLDER };
+
+  if (signal.ticket) {
+    return {
+      attribution: { ticket: signal.ticket, description: withTicketPrefix(signal.ticket, signal.text), weak: true },
+      unassignedText: UNASSIGNED_PLACEHOLDER,
+    };
+  }
+
+  return { attribution: null, unassignedText: `${UNASSIGNED_PLACEHOLDER} — ${signal.text}` };
+}
+
 export function planDay(params: PlanDayParams): PlanDayResult {
-  const { date, config, existingEntries, priorTicket } = params;
+  const { date, config, existingEntries, priorTicket, contextSignals = [] } = params;
   const zone = config.timezone;
   const weekday: Weekday = weekdayOf(atLocalTime(date, "00:00", zone));
 
@@ -234,11 +285,12 @@ export function planDay(params: PlanDayParams): PlanDayResult {
     const rounded = roundInterval(block, config.roundToMinutes);
     const segments = splitBlockByCommits(rounded, dayEvents, fallback, config.ticketPattern);
     for (const segment of segments) {
-      if (segment.attribution) {
-        entries.push(toEntry("ticket", segment.attribution.description, segment.interval, config.tags));
-        carryTicket = segment.attribution;
+      const { attribution, unassignedText } = applyContextSignal(segment.attribution, segment.interval, contextSignals);
+      if (attribution) {
+        entries.push(toEntry("ticket", attribution.description, segment.interval, config.tags));
+        carryTicket = attribution;
       } else {
-        entries.push(toEntry("unassigned", "(unassigned - fill in by hand)", segment.interval, config.tags));
+        entries.push(toEntry("unassigned", unassignedText, segment.interval, config.tags));
       }
     }
   }

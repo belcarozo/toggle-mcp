@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { describe, expect, it } from "vitest";
-import { bestDescriptionFor, describeFromBranch, extractTicket } from "./ticket.js";
+import { attributeTicket, bestDescriptionFor, describeFromBranch, extractTicket } from "./ticket.js";
 import type { GitEvent } from "./types.js";
 
 describe("extractTicket", () => {
@@ -87,5 +87,23 @@ describe("bestDescriptionFor", () => {
       }),
     ];
     expect(bestDescriptionFor("BACKEND-4221", events, "([A-Za-z]+-\\d+)")).toBe("BACKEND-4221: align splash");
+  });
+});
+
+describe("attributeTicket", () => {
+  it("marks the branch-slug fallback as weak - the case worth enriching from outside context", () => {
+    const events = [event({ kind: "checkout" })];
+    expect(attributeTicket("FFT-1326", events)).toEqual({
+      ticket: "FFT-1326",
+      description: "FFT-1326: android image",
+      weak: true,
+    });
+  });
+
+  it("does not mark a real commit message as weak", () => {
+    const events = [event({ kind: "commit", description: "FFT-1326: removes prefetch" })];
+    const attribution = attributeTicket("FFT-1326", events);
+    expect(attribution.description).toBe("FFT-1326: removes prefetch");
+    expect(attribution.weak).toBeUndefined();
   });
 });

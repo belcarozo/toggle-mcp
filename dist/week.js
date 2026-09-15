@@ -5,7 +5,7 @@ function localDateOf(isoUtc, zone) {
     return DateTime.fromISO(isoUtc, { zone: "utc" }).setZone(zone).toISODate();
 }
 export function buildWeekPlan(params) {
-    const { weekStart, weekEnd, config, gitEvents, calendarEvents, existingEntries } = params;
+    const { weekStart, weekEnd, config, gitEvents, calendarEvents, existingEntries, contextSignals } = params;
     const dates = eachDate(weekStart, weekEnd, config.timezone);
     let priorTicket = null;
     const days = dates.map((date) => {
@@ -17,6 +17,7 @@ export function buildWeekPlan(params) {
             calendarEvents,
             existingEntries: entriesForDate,
             priorTicket,
+            contextSignals,
         });
         priorTicket = carryTicket;
         return plan;

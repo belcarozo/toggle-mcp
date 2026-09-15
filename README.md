@@ -1,6 +1,6 @@
 # toggl-mcp
 
-An MCP (Model Context Protocol) server that generates a rough weekly [Toggl](https://toggl.com/) time-tracking baseline from your git activity (branches and commits across a set of configured repos) and calendar events supplied by the MCP client (e.g. a Google Calendar MCP server), and can optionally write that baseline to Toggl. It's meant as a starting point to hand-correct afterward, not a source of truth: it infers which ticket/branch you were likely working on and when from git reflog history, lays that alongside your meetings, and proposes time entries for a week — skipping any day that already has entries in Toggl.
+An MCP (Model Context Protocol) server that generates a rough weekly [Toggl](https://toggl.com/) time-tracking baseline from your git activity (branches and commits across a set of configured repos) and calendar events supplied by the MCP client (e.g. a Google Calendar MCP server), and can optionally write that baseline to Toggl. It's meant as a starting point to hand-correct afterward, not a source of truth: it infers which ticket/branch you were likely working on and when from git reflog history, lays that alongside your meetings, and proposes time entries for a week — skipping any day that already has entries in Toggl. Where git alone leaves an entry poorly described (no commit message, or none at all), it also reads your local Claude Code session transcripts, and any context notes the caller supplies (e.g. Slack thread excerpts), to name the work instead — see [Context notes](#context-notes).
 
 ## Requirements
 
@@ -110,6 +110,38 @@ This server has **no calendar integration of its own**. `plan_week` accepts a `c
 querying a separate calendar MCP server (e.g. a Google Calendar MCP) for whichever calendars you want
 counted, then passing the resulting events straight into `plan_week`.
 
+## Context notes
+
+Every entry description today comes from git alone: a real commit message when there is one, else
+the branch name de-kebabbed (`describeFromBranch()` in `src/ticket.ts`), else `(unassigned - fill in
+by hand)`. Two richer records of the same work exist outside git: your local Claude Code session
+transcripts, and (if you supply them) Slack threads. Both are treated as a **second-tier signal** -
+consulted only to fill a gap, never to override an entry that already has a real commit message:
+
+| git-derived attribution | context signal used when... | result |
+|---|---|---|
+| real commit message | never | unchanged |
+| branch-slug fallback | a signal names the *same* ticket | description replaced with the signal's text |
+| none (`unassigned`) | a signal overlaps in time | promoted to a ticket entry if the signal names one, else the placeholder gets the signal's text appended |
+
+Session transcripts (`~/.claude/projects/**/*.jsonl`) are read by the server itself, the same way it
+already reads your configured `repos` - no new credentials, no config field. A transcript's
+model-generated session title is only used when it's usable (long enough, not a generic reply like
+"Try again now"), and only for the branch-run(s) it actually agrees with: a session that touches
+several branches still has one title, so a branch-run whose own ticket disagrees with a ticket named
+in that title is dropped rather than mislabeled.
+
+Slack (or any other network source) has to come from the caller instead, since the server has no
+integration or credentials of its own - `plan_week` accepts an optional `contextNotes` array,
+exactly mirroring how `calendarEvents` works today:
+
+```json
+{ "text": "FFT-1402: discussed the systematic debugging approach", "start": "2026-08-25T10:00:00-03:00", "end": "2026-08-25T10:05:00-03:00", "source": "slack" }
+```
+
+`git_activity` also reports the transcript-derived signals it resolved (not `contextNotes` - it's a
+git-only debug tool), so you can sanity-check them the same way you'd sanity-check ticket attribution.
+
 ## Configuration CLI
 
 - **`toggl-mcp init`** (`node dist/index.js init` from a clone) — interactive wizard; creates the config if
@@ -137,6 +169,13 @@ counted, then passing the resulting events straight into `plan_week`.
   merge or drop these; it only decides whether the block was worth entering in the first place. Only
   `commit`/`commit (merge)`/`commit (amend)` reflog entries split a block; `pull` and `reset` don't, since
   they carry no message.
+- Context-note text (a session title or a Slack excerpt) lands verbatim in Toggl, capped at 160
+  characters and collapsed to one line — it's written to a third-party service, so review the
+  proposal before `apply_week` the same way you'd review any other entry.
+- A Claude Code session's title is generated once for the whole session. If a session touches
+  several tickets, the title is only trusted for the branch-run(s) it agrees with (see [Context
+  notes](#context-notes)) — a run with no ticket of its own still gets the title, for lack of any
+  way to tell whether it actually applies.
 
 ## MCP tools
 
@@ -144,10 +183,10 @@ counted, then passing the resulting events straight into `plan_week`.
 Resolves your Toggl account, default workspace, and the `projectName` from config to their numeric IDs. Results are cached on disk for 24 hours because Toggl's `/me` endpoint is rate-limited to 30 requests/hour. Pass `forceRefresh: true` to bypass the cache.
 
 ### `git_activity`
-Debug tool — makes no network calls. Shows the raw git reflog events (checkouts, commits, merges, amends, pulls, resets) across the configured `repos` for a date range, along with the ticket ID and description resolved from each branch/commit. Use this to sanity-check ticket attribution before trusting `plan_week`'s output.
+Debug tool — makes no network calls. Shows the raw git reflog events (checkouts, commits, merges, amends, pulls, resets) across the configured `repos` for a date range, along with the ticket ID and description resolved from each branch/commit, plus the context signals resolved from local Claude Code session transcripts for the same range. Use this to sanity-check attribution before trusting `plan_week`'s output.
 
 ### `plan_week`
-Builds a baseline time-entry proposal for a week from git activity plus the `calendarEvents` you supply. Writes nothing to Toggl. Days that already have existing Toggl entries are skipped (`skip: "already-tracked"`), as are non-workdays (`skip: "not-a-workday"`). A day with several commits produces several entries, not one — each commit ends its own entry, so a busy day's `entries` array can be long. Returns a `weekPlan` object (along with the resolved `workspaceId`/`projectId`) intended to be passed straight through to `apply_week`.
+Builds a baseline time-entry proposal for a week from git activity, local session transcripts, plus the `calendarEvents` and optional `contextNotes` (e.g. Slack thread excerpts) you supply — see [Context notes](#context-notes) for how the latter two enrich entry descriptions. Writes nothing to Toggl. Days that already have existing Toggl entries are skipped (`skip: "already-tracked"`), as are non-workdays (`skip: "not-a-workday"`). A day with several commits produces several entries, not one — each commit ends its own entry, so a busy day's `entries` array can be long. Returns a `weekPlan` object (along with the resolved `workspaceId`/`projectId`) intended to be passed straight through to `apply_week`.
 
 ### `apply_week`
 Writes the exact `weekPlan` (plus `workspaceId`/`projectId`) returned by `plan_week` to Toggl. Immediately before writing each day, it re-checks Toggl for existing entries on that date — in case something was tracked between the `plan_week` call and now — and skips the day if so. Days already marked `skip` in the input are never written. Requests are throttled to Toggl's rate limit (~1 entry/second), one POST per entry, so a plan with many entries can take a while — a day with 20+ commits can take tens of seconds on its own.
@@ -169,4 +208,4 @@ npm test         # single run
 npm run test:watch
 ```
 
-Key modules: `src/config.ts` (config loading/validation), `src/git.ts` (git reflog reading), `src/ticket.ts` (ticket ID extraction from branch names), `src/time.ts` (timezone-aware week/date resolution), `src/toggl.ts` (Toggl API client), `src/week.ts` (day/week plan construction), `src/plan.ts`, `src/types.ts`, `src/defaults.ts` (the today-preserving defaults for `ticketPattern`/`baseBranches`), and `src/cli/` (the `init`/`doctor` commands).
+Key modules: `src/config.ts` (config loading/validation), `src/git.ts` (git reflog reading), `src/ticket.ts` (ticket ID extraction from branch names), `src/time.ts` (timezone-aware week/date resolution), `src/toggl.ts` (Toggl API client), `src/week.ts` (day/week plan construction), `src/plan.ts`, `src/types.ts`, `src/defaults.ts` (the today-preserving defaults for `ticketPattern`/`baseBranches`), `src/transcripts.ts` (reading/parsing local Claude Code session transcripts into context signals), `src/context.ts` (matching context signals against a time interval, and turning caller-supplied notes into signals), and `src/cli/` (the `init`/`doctor` commands).
