@@ -10,20 +10,33 @@ An MCP (Model Context Protocol) server that generates a rough weekly [Toggl](htt
 
 ## Quick start
 
+Clone the repo and link it rather than installing straight from the git URL — `npm install -g github:...`
+routes through npm's global-install-from-git codepath, which has proven unreliable (it can leave the
+package symlinked into an ephemeral cache tmp directory instead of a real install, producing a "command
+not found" `toggl-mcp` that looks installed but isn't). A local clone avoids that entirely and doubles as
+your update mechanism (`git pull`).
+
 ```bash
-npm install -g github:belcarozo/toggl-mcp    # dist/ ships prebuilt in the repo, so no build step runs
+git clone git@github.com:belcarozo/toggl-mcp.git
+cd toggl-mcp
+npm install
+npm link                                     # symlinks the `toggl-mcp` command into your npm global bin
 toggl-mcp init                               # interactive wizard - creates ~/.config/toggl-mcp/config.json
 toggl-mcp doctor                             # sanity-checks the config, repos, and ticket pattern
 ```
 
 `init` walks you through every field below with sensible detected defaults (system timezone, `git`-repo
-validation, a live picker of your real Toggl projects if `TOGGL_API_TOKEN` is already set in your shell) and
-prints a ready-to-paste MCP client registration snippet when it's done. Re-running `init` against an
-existing config pre-fills every prompt with the current value — press Enter through all of them to leave it
-unchanged, or answer just the ones you want to change.
+validation). If `TOGGL_API_TOKEN` isn't already set in your shell, it asks for it up front — entering it
+there only holds it in memory for the rest of the `init` session (to look up your real workspace/projects
+for the picker below); it's never written to `config.json`, and leaving it blank just falls back to typing
+the project name by hand. `init` prints a ready-to-paste MCP client registration snippet when it's done.
+Re-running `init` against an existing config pre-fills every prompt with the current value — press Enter
+through all of them to leave it unchanged, or answer just the ones you want to change. The project name is
+required and `init` will keep re-asking until you give it a non-empty value.
 
-Working from a clone instead: `npm install && npm run build`, then run `node dist/index.js init`/`doctor` in
-place of the `toggl-mcp` bin below.
+`dist/` ships prebuilt and committed, so the steps above don't need to compile anything. After pulling a
+repo update, run `npm run build` to pick up source changes (needs the devDependencies from `npm install`
+above).
 
 ## Registering as an MCP server
 
@@ -69,7 +82,7 @@ is the reference for what each field means and for hand-editing afterward.
 | `baseBranches` | string[] (default `["main", "master", "develop"]`) | Checkout targets treated as base/integration branches, never as billable work. Add your trunk branch name here if it isn't one of the defaults. |
 | `minEntryMinutes` | integer (min 1, default `15`) | Minimum duration for a generated time entry; shorter spans are dropped or merged. |
 | `roundToMinutes` | integer (min 1, default `15`) | Duration/boundary rounding granularity applied to generated entries. |
-| `tags` | string[] (default `["auto-baseline"]`) | Toggl tags applied to every entry this server creates. |
+| `tags` | string[] (default `[]`) | Toggl tags applied to every entry this server creates. |
 | `createdWith` | string (default `"toggl-mcp"`) | Value sent as Toggl's `created_with` field on created entries. |
 
 ### Minimal example config
@@ -94,7 +107,7 @@ is the reference for what each field means and for hand-editing afterward.
   "baseBranches": ["main", "master", "develop"],
   "minEntryMinutes": 15,
   "roundToMinutes": 15,
-  "tags": ["auto-baseline"],
+  "tags": [],
   "createdWith": "toggl-mcp"
 }
 ```
