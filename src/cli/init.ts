@@ -76,13 +76,18 @@ async function collectTicketPattern(prompter: Prompter, base: Config, repos: str
   }
 }
 
+function requireProjectName(value: string): string {
+  if (value.trim() === "") throw new Error("toggl-mcp: a Toggl project name is required");
+  return value;
+}
+
 async function pickProjectName(prompter: Prompter, base: Config): Promise<string> {
   const spec = buildFieldSpecs().find((s) => s.id === "projectName")!;
   const token = process.env.TOGGL_API_TOKEN;
   if (!token) {
     console.log("\n(TOGGL_API_TOKEN is not set in this shell, so I can't list your real Toggl projects - type the exact name.)");
     return askUntilValid(prompter, `${spec.prompt} [${defaultAnswer(spec, base)}]`, (raw) =>
-      raw.trim() === "" ? base.projectName : (spec.parse(raw) as string),
+      raw.trim() === "" ? requireProjectName(base.projectName) : (spec.parse(raw) as string),
     );
   }
 
@@ -93,7 +98,7 @@ async function pickProjectName(prompter: Prompter, base: Config): Promise<string
     if (projects.length === 0) {
       console.log("\n(no projects found in your default Toggl workspace - type the exact name.)");
       return askUntilValid(prompter, `${spec.prompt} [${defaultAnswer(spec, base)}]`, (raw) =>
-        raw.trim() === "" ? base.projectName : (spec.parse(raw) as string),
+        raw.trim() === "" ? requireProjectName(base.projectName) : (spec.parse(raw) as string),
       );
     }
     console.log("\nYour Toggl projects:");
@@ -102,7 +107,7 @@ async function pickProjectName(prompter: Prompter, base: Config): Promise<string
       prompter,
       `Pick a number, or type a project name [${defaultAnswer(spec, base)}]`,
       (raw) => {
-        if (raw.trim() === "") return base.projectName;
+        if (raw.trim() === "") return requireProjectName(base.projectName);
         const n = Number(raw.trim());
         if (Number.isInteger(n) && n >= 1 && n <= projects.length) return projects[n - 1].name;
         return spec.parse(raw) as string;
@@ -111,7 +116,7 @@ async function pickProjectName(prompter: Prompter, base: Config): Promise<string
   } catch (err) {
     console.log(`\n(couldn't reach Toggl to list projects: ${(err as Error).message} - type the exact name.)`);
     return askUntilValid(prompter, `${spec.prompt} [${defaultAnswer(spec, base)}]`, (raw) =>
-      raw.trim() === "" ? base.projectName : (spec.parse(raw) as string),
+      raw.trim() === "" ? requireProjectName(base.projectName) : (spec.parse(raw) as string),
     );
   }
 }
@@ -146,6 +151,16 @@ export async function runInit(prompter: Prompter, options: RunInitOptions = {}):
   } catch (err) {
     console.log(`${(err as Error).message}`);
     if (!(await prompter.confirm("Start fresh instead?", true))) return 1;
+  }
+
+  if (!process.env.TOGGL_API_TOKEN) {
+    const token = (
+      await prompter.ask(
+        "Toggl API token (get one at https://track.toggl.com/profile) - used only for this session to look up your real " +
+          "workspace/projects below, never written to config.json; leave blank to skip and type the project name manually: ",
+      )
+    ).trim();
+    if (token !== "") process.env.TOGGL_API_TOKEN = token;
   }
 
   const answers: Record<string, string> = {};
